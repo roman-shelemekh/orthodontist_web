@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 /.env.dev
+/.env.prod
+/.env.prod.db
