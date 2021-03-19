@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:latest
+    volumes:
+    - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=orthodontist
+      - POSTGRES_PASSWORD=orthodontist
+      - POSTGRES_DB=orthodontist_dev
+
+  orthodontist:
+    build: ./orthodontist
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+    - ./orthodontist/:/usr/src/orthodontist/
+    ports:
+    - 8000:8000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
