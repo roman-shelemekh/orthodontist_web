@@ -9,7 +9,9 @@ services:
       - ./.env.prod.db
 
   orthodontist:
-    build: ./orthodontist
+    build:
+      context: ./orthodontist
+      dockerfile: Dockerfile.prod
     command: gunicorn orthodontist.wsgi --bind=0.0.0.0:8000
     ports:
     - 8000:8000
