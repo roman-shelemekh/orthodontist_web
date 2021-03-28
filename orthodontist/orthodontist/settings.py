@@ -141,6 +141,7 @@ CACHES = {
     }
 }
 
+LOGIN_URL = 'login'
 
 USER_ONLINE_TIMEOUT = 60 * 3
 USER_LASTSEEN_TIMEOUT = 60 * 60 * 24 * 7

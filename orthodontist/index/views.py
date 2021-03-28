@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
-
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.models import User
@@ -17,13 +17,12 @@ def signup(request):
     if request.method == 'POST':
         print('1')
         form = SignupForm(request.POST)
-        url = request.POST.get('continue', '/')
         print(form.is_valid())
         if form.is_valid():
             print('2')
             user = form.save()
             form.log_in(request,user)
-            return HttpResponseRedirect(url)
+            return HttpResponseRedirect(reverse('user', args=[request.user.id]))
     else:
         form = SignupForm()
     return render(request, 'index/signup.html', {'form': form})
@@ -37,10 +36,9 @@ def logout_view(request):
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
-        url = request.POST.get('continue', '/')
         if form.is_valid():
             if form.log_in(request):
-                return HttpResponseRedirect(url)
+                return HttpResponseRedirect(reverse('user', args=[request.user.id]))
             else:
                 return render(request, 'index/login.html', {'form': form, 'error_message': 'Неверные логин или пароль'})
     else:
@@ -65,6 +63,7 @@ class UserView(generic.DetailView):
         return context
 
 
+@login_required(redirect_field_name=None)
 def user_update(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
