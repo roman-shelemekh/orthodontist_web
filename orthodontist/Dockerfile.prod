@@ -21,8 +21,8 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN mkdir /home/balthasar/orthodontist/static
-RUN mkdir /home/balthasar/orthodontist/media
+RUN mkdir -p /home/balthasar/orthodontist/static
+RUN mkdir -p /home/balthasar/orthodontist/media
 
 RUN chown -R balthasar:balthasar /home/balthasar/orthodontist
 

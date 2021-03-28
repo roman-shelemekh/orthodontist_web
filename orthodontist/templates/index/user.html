@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %} Мой профиль | {{ block.super }}{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="card mb-3" style="max-width: 540px;">
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-success" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                <div class="row g-0">
+                    <div class="col-md-4">
+                    <img class="img-thumbnail" src="{{ userdata.profile.image.url }}" alt="profile-pic">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ userdata.username }}</h5>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    {% if userdata.profile.online %}
+                                        Сейчас на сайте
+                                    {% else %}
+                                        {% if userdata.profile.last_seen %}
+                                        Заходил {{ userdata.profile.last_seen|timesince }} назад
+                                        {% else %}
+                                        Заходил давно
+                                        {% endif %}
+                                    {% endif %}
+                                </small>
+                            </p>
+                            <p class="card-text">ID пользователя: {{ userdata.id }}</p>
+                            <p class="card-text">Дата регистрации: {{ userdata.date_joined.date }}</p>
+                            <p class="card-text">Электронная почта: {{ userdata.email }}</p>
+                            {% if update %}
+                            <a class="btn btn-primary btn-small" href="{% url 'update' %}" role="button">Изменить</a>
+                            <a class="btn btn-primary btn-small" href="#" role="button">Удалить</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

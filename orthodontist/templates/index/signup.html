@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация | {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<main class="text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                {% for e in form.non_field_errors %}
+                <div class="alert alert-danger">{{ e }}</div>
+                {% endfor %}
+                <form class="signup" action="" method="post">
+                    {% csrf_token %}
+                    <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
+                    {{ form.username }}
+                    {{ form.email }}
+                    {{ form.password1 }}
+                    {{ form.password2 }}
+                    <div class="checkbox mb-3">
+                        <label>{{ form.remember_me }} {{ form.remember_me.label }}</label>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">Зарегистрироваться</button>
+                    {% for field in form %}
+                    {% if field.errors %}
+                    <dev style="color: red;">{{ field.errors }}</dev>
+                    {% endif %}
+                    {% endfor %}
+                    <div>
+                        <small class="text-muted">{{ form.password1.help_text }}</small>
+                    </div>
+                    <div>
+                        <small class="text-muted">Уже зарегистрированы? <a class="ml-2" href="{% url 'login' %}">Войти</a></small>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+{% endblock %}

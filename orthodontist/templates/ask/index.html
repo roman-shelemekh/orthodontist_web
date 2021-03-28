@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Задать вопрос | {{ block.super }}{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div><h1>Задайте вопрос врачу-ортодонту</h1></div>
+
+
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Дата: сегодня</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Автор: admin</h6>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+</main>
+
+
+<main role="main">
+    <div class="container">
+        {% if question_list %}
+        <ul>
+        {% for question in question_list %}
+            <li><a href="{% url 'ask:question' question.id %}">{{ question.title }}</a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+            <p>Здесь еще нет вопросов.</p>
+        {% endif %}
+    </div>
+</main>
+
+{% endblock %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вопрос ортодонту</title>
+</head>
+<body>
+
+
+
+</body>
+</html>
