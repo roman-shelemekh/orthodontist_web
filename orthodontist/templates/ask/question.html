@@ -1,17 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-<h1>{{ question.title }}</h1>
-<ul>
-{% for answer in question.answer_set.all %}
-    <li>{{ answer.text }}</li>
-{% endfor %}
-</ul>
+{% block title %} {{question }} | {{ block.super }}{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<main class="container">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    <div class="row justify-content-center">
+        <div class="card" style="margin: 10px; width: 50rem;">
+            <div class="card-body">
+                <div class="mask" style="float:left">
+                    <img src="{{ question.author.profile.image.url }}" class="card-img-top" alt="...">
+                </div>
+                <div style="margin: 55px">
+                    {% if question.author.id %}
+                    <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author }}</a></h6>
+                    {% endif %}
+                    <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
+                </div>
+                <h5 class="card-title">{{ question.title }}</h5>
+                <p class="card-text">{{ question.text }}</p>
+                {% if user.id == question.author.id %}
+                <a href="{% url 'ask:delete_question' question.id %}" class="card-link">Удалить</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <h3>Ответы:</h3>
+    </div>
+    {% if question.answer_set.all %}
+    <div class="row justify-content-center">
+        {% for answer in question.answer_set.all %}
+        <div class="card" style="margin: -1px; width: 50rem;">
+            <div class="card-body">
+                <div class="reply-mask" style="float:left">
+                    <img src="{{ answer.author.profile.image.url }}" class="card-img-top" alt="...">
+                </div>
+                <div style="margin: 15px">
+                    {% if answer.author.id %}
+                    <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' answer.author.id %}">{{ answer.author }}</a></h6>
+                    {% endif %}
+                    <h6 class="card-subtitle mb-2 text-muted">Дата: {{ answer.date }}</h6>
+                </div>
+                <p class="card-text">{{ answer.text }}</p>
+                {% if user.id == answer.author.id %}
+                <a href="{% url 'ask:delete_answer' answer.id %}" class="card-link">Удалить</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center">
+        <p>Пока здесь нет ответов. Вы можете стать первым</p>
+    </div>
+    {% endif %}
+    <div class="text-center" style="margin-top: 20px;">
+        <h3>Предложите свой ответ:</h3>
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="row justify-content-center">
+        <form method="post" style="margin: 10px; width: 51rem;">{% csrf_token %}
+                {{ reply_form.text }}
+                <input class="btn btn-primary" type="submit" value="Ответить" style="margin-top: 20px;">
+        </form>
+    </div>
+    {% else %}
+    <div class="row text-center" style="margin: 20px;">
+        <p>Для добавления ответа Вам необходимо <a href="{% url 'login' %}?next={% url 'ask:question' question.id %}">войти на сайт</a> или <a href="{% url 'signup' %}">зарегистрироваться</a>.</p>
+    </div>
+    {% endif %}
+</main>
+
+{% endblock %}

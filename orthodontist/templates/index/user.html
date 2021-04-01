@@ -5,8 +5,10 @@
 {% block content %}
 <main class="container">
     <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
+        <div class="col-md-5">
+            <div class="text-center" style="margin-bottom: 18px;">
+                <h3>Профиль пользователя</h3>
+            </div>
             <div class="card mb-3" style="max-width: 540px;">
                 {% if messages %}
                     {% for message in messages %}
@@ -36,14 +38,38 @@
                             <p class="card-text">ID пользователя: {{ userdata.id }}</p>
                             <p class="card-text">Дата регистрации: {{ userdata.date_joined.date }}</p>
                             <p class="card-text">Электронная почта: {{ userdata.email }}</p>
-                            {% if update %}
-                            <a class="btn btn-primary btn-small" href="{% url 'update' %}" role="button">Изменить</a>
-                            <a class="btn btn-primary btn-small" href="#" role="button">Удалить</a>
+                            {% if user == userdata %}
+                            <a class="btn btn-primary btn-small" href="{% url 'update' %}" role="button">Изменить профиль</a>
                             {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-md-7">
+            <div class="text-center">
+                <h3>Вопросы от пользователя {{ userdata.username }}</h3>
+            </div>
+
+            {% if userdata.question_set.all %}
+            {% for question in user_questions %}
+
+            <div class="row justify-content-center">
+                <div class="card" style="margin: 10px; width: 50rem;">
+                    <div class="card-body">
+                        <div style="">
+                            <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">Ответов: {{ question.answers_count }}</h6>
+                        </div>
+                        <h5 class="card-title">{{ question.title }}</h5>
+                        <a href="{% url 'ask:question' question.id %}" class="btn btn-primary btn-sm">Перейти к вопросу</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+                    <p>Пользователь {{ userdata.username }} пока не задавал вопросы.</p>
+            {% endif %}
         </div>
     </div>
 </main>

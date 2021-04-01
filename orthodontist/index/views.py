@@ -5,8 +5,8 @@ from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm
 from django.contrib.auth.models import User
 from django.views import generic
 from django.contrib import messages
-
-from django.utils import timezone
+from django.db.models import Count
+from ask.models import Question
 
 
 def index(request):
@@ -36,34 +36,32 @@ def logout_view(request):
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
+        url = request.POST.get('next', '/')
         if form.is_valid():
             if form.log_in(request):
-                return HttpResponseRedirect(reverse('user', args=[request.user.id]))
+                return HttpResponseRedirect(url)
             else:
                 return render(request, 'index/login.html', {'form': form, 'error_message': 'Неверные логин или пароль'})
     else:
         form = LoginForm()
     return render(request, 'index/login.html', {'form': form})
 
+
 class UserView(generic.DetailView):
     model = User
     template_name = 'index/user.html'
     context_object_name = 'userdata'
 
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.id == kwargs['pk']:
-            self.user_update = True
-        else:
-            self.user_update = False
-        return super(UserView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(UserView, self).get_context_data()
-        context['update'] = self.user_update
+        user_questions = Question.objects.filter(author=kwargs['object']).order_by('-date')
+        user_questions = user_questions.annotate(answers_count=Count('answer__id'))
+        context['user_questions'] = user_questions
         return context
 
 
-@login_required(redirect_field_name=None)
+@login_required
 def user_update(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)

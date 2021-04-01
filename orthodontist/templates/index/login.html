@@ -18,6 +18,9 @@
                         <label>{{ form.remember_me }} {{ form.remember_me.label }}</label>
                     </div>
                     <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+                    {% if request.GET.next %}
+                    <input type="hidden" name="next" value="{{ request.GET.next }}">
+                    {% endif %}
                     {% if error_message %}<div style="color:red; padding:20px">{{ error_message }}</div>{% endif %}
                     <div>
                         <small class="text-muted">Еще не зарегистрированы? <a class="ml-2" href="{% url 'signup' %}">Зарегистрироваться</a></small>

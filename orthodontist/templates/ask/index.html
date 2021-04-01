@@ -4,48 +4,42 @@
 
 {% block content %}
 <main class="container">
-    <div><h1>Задайте вопрос врачу-ортодонту</h1></div>
-
-
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Дата: сегодня</h6>
-            <h6 class="card-subtitle mb-2 text-muted">Автор: admin</h6>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-    </div>
-</main>
-
-
-<main role="main">
-    <div class="container">
-        {% if question_list %}
-        <ul>
-        {% for question in question_list %}
-            <li><a href="{% url 'ask:question' question.id %}">{{ question.title }}</a></li>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">{{ message }}</div>
         {% endfor %}
-        </ul>
-        {% else %}
-            <p>Здесь еще нет вопросов.</p>
-        {% endif %}
+    {% endif %}
+
+    <div class="text-center" style="margin: 20px;">
+        <h1>Задайте вопрос врачу-ортодонту</h1>
+        <a class="btn btn-primary btn-lg" href="{% url 'ask:ask_question' %}" role="button">Задать вопрос</a>
     </div>
+    {% if question_list %}
+        {% for question in question_list %}
+
+        <div class="row justify-content-center">
+            <div class="card" style="margin: 10px; width: 50rem;">
+                <div class="card-body">
+                    <div class="mask" style="float:left">
+                        <img src="{{ question.author.profile.image.url }}" class="card-img-top" alt="...">
+                    </div>
+                    <div style="margin: 40px">
+                        {% if question.author.id %}
+                        <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author }}</a></h6>
+                        {% endif %}
+                        <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">Ответов: {{ question.answers_count }}</h6>
+                    </div>
+                    <h5 class="card-title">{{ question.title }}</h5>
+                    <p class="card-text">{{ question.text }}</p>
+                    <a href="{% url 'ask:question' question.id %}" class="btn btn-primary">Посмотреть ответы</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+            <p>Здесь еще нет вопросов.</p>
+    {% endif %}
 </main>
 
 {% endblock %}
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Вопрос ортодонту</title>
-</head>
-<body>
-
-
-
-</body>
-</html>
