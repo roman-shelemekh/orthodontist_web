@@ -1,6 +1,7 @@
 from django import forms
 from .models import Question, Answer
 
+
 class AskQuestionForm(forms.ModelForm):
     class Meta:
         model = Question
@@ -19,6 +20,7 @@ class AskQuestionForm(forms.ModelForm):
         question.save()
         return question
 
+
 class ReplyForm(forms.ModelForm):
     class Meta:
         model = Answer
@@ -34,3 +36,16 @@ class ReplyForm(forms.ModelForm):
         answer = Answer(**self.cleaned_data)
         answer.save()
         return answer
+
+
+ORDER_BY = [
+    ('new', 'дате - сначала новые'),
+    ('old', 'дате - сначала старые'),
+    ('popular', 'популярности - сначала популярные'),
+]
+
+
+class OrderByForm(forms.Form):
+    order_by = forms.ChoiceField(required=False, choices=ORDER_BY,
+                                 widget=forms.Select(attrs={'class': 'form-control mr-sm-2', 'id': 'sort-input'}),
+                                 label='Сортировать по')

@@ -26,6 +26,9 @@
                 {% if user.id == question.author.id %}
                 <a href="{% url 'ask:delete_question' question.id %}" class="card-link">Удалить</a>
                 {% endif %}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="like-btn btn btn-sm btn-primary" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}">Нравится: <span class="like_count">{{ question.like.count }}</span></button>
+                </div>
             </div>
         </div>
     </div>
@@ -77,4 +80,8 @@
     {% endif %}
 </main>
 
+{% endblock %}
+{% load static %}
+{% block script %}
+<script src="{% static 'index/main.js' %}"></script>
 {% endblock %}

@@ -14,9 +14,19 @@
         <h1>Задайте вопрос врачу-ортодонту</h1>
         <a class="btn btn-primary btn-lg" href="{% url 'ask:ask_question' %}" role="button">Задать вопрос</a>
     </div>
+
+    <div>
+        <form class="form-inline" id="orderQuestions">
+            <div class="form-group mx-sm-2 mb-2">
+                <table>{{ form.as_table }}</table>
+                <button type="submit" class="btn btn-primary">Сортировать</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
     {% if question_list %}
         {% for question in question_list %}
-
         <div class="row justify-content-center">
             <div class="card" style="margin: 10px; width: 50rem;">
                 <div class="card-body">
@@ -33,6 +43,10 @@
                     <h5 class="card-title">{{ question.title }}</h5>
                     <p class="card-text">{{ question.text }}</p>
                     <a href="{% url 'ask:question' question.id %}" class="btn btn-primary">Посмотреть ответы</a>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %}" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}">Нравится: <span class="like_count">{{ question.like.count }}</span></button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,6 +54,11 @@
     {% else %}
             <p>Здесь еще нет вопросов.</p>
     {% endif %}
+    </div>
 </main>
 
+{% endblock %}
+{% load static %}
+{% block script %}
+<script src="{% static 'index/main.js' %}"></script>
 {% endblock %}
