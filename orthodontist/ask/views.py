@@ -15,6 +15,7 @@ from django.contrib import messages
 class AskView(ListView):
     model = Question
     template_name = 'ask/index.html'
+    paginate_by = 5
 
     def dispatch(self, request, *args, **kwargs):
         self.form = OrderByForm(request.GET)
@@ -36,6 +37,7 @@ class AskView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AskView, self).get_context_data(**kwargs)
         context['form'] = self.form
+        context['order_by'] = self.form.cleaned_data.get('order_by')
         return context
 
 
