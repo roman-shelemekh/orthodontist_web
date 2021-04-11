@@ -36,6 +36,10 @@
                     </ul>
 
                     <ul class="navbar-nav ms-auto">
+                        <form class="d-flex" action="{% url 'search' %}">
+                            {{ searchform.search_input }}
+<!--                            <button class="btn btn-outline-primary" type="submit">Поиск</button>-->
+                        </form>
                         {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -41,11 +41,11 @@ class ReplyForm(forms.ModelForm):
 ORDER_BY = [
     ('new', 'дате - сначала новые'),
     ('old', 'дате - сначала старые'),
-    ('popular', 'популярности - сначала популярные'),
+    ('popular', 'популярности'),
+    ('answers', 'обсуждаемости')
 ]
 
 
 class OrderByForm(forms.Form):
     order_by = forms.ChoiceField(required=False, choices=ORDER_BY,
-                                 widget=forms.Select(attrs={'class': 'form-control mr-sm-2', 'id': 'sort-input'}),
-                                 label='Сортировать по')
+                                 widget=forms.Select(attrs={'class': 'form-control'}), label='Сортировать по')

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Результаты поиска | {{ block.super }}{% endblock %}
+
+{% block content %}
+{% load my_tags %}
+<main class="container">
+    <div class="row text-center py-3">
+        <h1>Результаты поиска:</h1>
+    </div>
+    <form>
+        <div class="row g-3 align-items-end pb-3 justify-content-center">
+            <div class="col-auto">{{ form.search_input.label }}{{ form.search_input }}</div>
+            <div class="col-auto">{{ form.search_by.label }}{{ form.search_by }}</div>
+            <div class="col-auto">{{ form.order_by.label }} {{ form.order_by }}</div>
+            <div class="col-auto"><button type="submit" class="btn btn-primary">Поиск</button></div>
+        </div>
+    </form>
+    {% if question_list %}
+    {% for question in question_list %}
+    <div class="row justify-content-center pb-2">
+        <div class="card">
+            <div class="card-body">
+                {% if question.author.id %}
+                <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author|highlight_search:request.GET.search_input }}</a></h6>
+                {% endif %}
+                <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
+                <h5 class="card-title"><a style="color: black; text-decoration: none;" href="{% url 'ask:question' question.id %}">{{ question.title|highlight_search:request.GET.search_input }}</a></h5>
+                <p class="card-text">{{ question.text|highlight_search:request.GET.search_input }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+            <p>По Вашему запросу нет результатов.</p>
+    {% endif %}
+
+
+    {% if question_list %}
+    <nav>
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page=1&search_input={{ request.GET.search_input }}{% if request.GET.search_by %}&search_by={{ request.GET.search_by }}{% endif %}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">Первая</a>
+            </li>
+            {% if page_obj.number|add:'-2' > 0 %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page={{ page_obj.number|add:'-2' }}&search_input={{ request.GET.search_input }}{% if request.GET.search_by %}&search_by={{ request.GET.search_by }}{% endif %}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.number|add:'-2' }}</a>
+            </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page={{ page_obj.previous_page_number }}&search_input={{ request.GET.search_input }}{% if request.GET.search_by %}&search_by={{ request.GET.search_by }}{% endif %}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.previous_page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link text-primary" href="#" disabled>Первая</a>
+            </li>
+            {% endif %}
+            <li class="page-item active">
+                <span class="page-link bg-primary">{{ page_obj.number }}</span>
+            </li>
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page={{ page_obj.next_page_number }}&search_input={{ request.GET.search_input }}{% if request.GET.search_by %}&search_by={{ request.GET.search_by }}{% endif %}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.next_page_number }}</a>
+            </li>
+            {% if page_obj.number|add:'2' > 0 %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page={{ page_obj.number|add:'2' }}&search_input={{ request.GET.search_input }}{% if request.GET.search_by %}&search_by={{ request.GET.search_by }}{% endif %}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.number|add:'2' }}</a>
+            </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?&page={{ page_obj.paginator.num_pages }}&search_input={{ request.GET.search_input }}{% if request.GET.search_by %}&search_by={{ request.GET.search_by }}{% endif %}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">Последняя</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link text-primary" href="#">Последняя</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+</main>
+
+{% endblock %}

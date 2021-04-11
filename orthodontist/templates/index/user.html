@@ -38,6 +38,7 @@
                             <p class="card-text">ID пользователя: {{ userdata.id }}</p>
                             <p class="card-text">Дата регистрации: {{ userdata.date_joined.date }}</p>
                             <p class="card-text">Электронная почта: {{ userdata.email }}</p>
+                            <p class="card-text">Репутация: {{ rating }}</p>
                             {% if user == userdata %}
                             <a class="btn btn-primary btn-small" href="{% url 'update' %}" role="button">Изменить профиль</a>
                             {% endif %}

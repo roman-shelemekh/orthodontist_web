@@ -1,11 +1,12 @@
 from django.shortcuts import render, HttpResponseRedirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm
+from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm, SearchForm
 from django.contrib.auth.models import User
 from django.views import generic
 from django.contrib import messages
-from django.db.models import Count
+from django.views.generic import ListView
+from django.db.models import Count, Q
 from ask.models import Question
 
 
@@ -15,13 +16,10 @@ def index(request):
 
 def signup(request):
     if request.method == 'POST':
-        print('1')
         form = SignupForm(request.POST)
-        print(form.is_valid())
         if form.is_valid():
-            print('2')
             user = form.save()
-            form.log_in(request,user)
+            form.log_in(request, user)
             return HttpResponseRedirect(reverse('user', args=[request.user.id]))
     else:
         form = SignupForm()
@@ -55,9 +53,14 @@ class UserView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserView, self).get_context_data()
-        user_questions = Question.objects.filter(author=kwargs['object']).order_by('-date')
+        userd = kwargs['object']
+        user_questions = Question.objects.filter(author=userd).order_by('-date')
         user_questions = user_questions.annotate(answers_count=Count('answer__id'))
         context['user_questions'] = user_questions
+        rating = 0
+        for question in userd.question_set.all():
+            rating += question.like.count()
+        context['rating'] = rating
         return context
 
 
@@ -76,3 +79,42 @@ def user_update(request):
         p_form = ProfileUpdateForm(instance=request.user.profile)
     context = {'u_form': u_form, 'p_form': p_form}
     return render(request, 'index/user_update.html', context)
+
+
+class SearchResults(ListView):
+    model = Question
+    template_name = 'index/search.html'
+    paginate_by = 5
+
+    def dispatch(self, request, *args, **kwargs):
+        self.form = SearchForm(request.GET)
+        self.form.is_valid()
+        return super(SearchResults, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = Question.objects.all()
+        queryset = queryset.annotate(answers_count=Count('answer__id'))
+        queryset = queryset.annotate(like_count=Count('like__id'))
+        if not self.form.cleaned_data.get('search_by') or self.form.cleaned_data.get('search_by') == "default":
+            queryset = queryset.filter(Q(text__icontains=self.form.cleaned_data.get('search_input')
+                                                 ) | Q(title__icontains=self.form.cleaned_data.get('search_input')))
+        elif self.form.cleaned_data.get('search_by') == "question_title":
+            queryset = queryset.filter(title__icontains=self.form.cleaned_data.get('search_input'))
+        elif self.form.cleaned_data.get('search_by') == "question_text":
+            queryset = queryset.filter(text__icontains=self.form.cleaned_data.get('search_input'))
+        elif self.form.cleaned_data.get('search_by') == "question_author":
+            queryset = queryset.filter(author__username=self.form.cleaned_data.get('search_input'))
+        if not self.form.cleaned_data.get('order_by') or self.form.cleaned_data.get('order_by') == "new":
+            queryset = queryset.order_by('-date')
+        elif self.form.cleaned_data.get('order_by') == "old":
+            queryset = queryset.order_by('date')
+        elif self.form.cleaned_data.get('order_by') == "popular":
+            queryset = queryset.order_by('-like_count')
+        elif self.form.cleaned_data.get('order_by') == "answers":
+            queryset = queryset.order_by('-answers_count')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(SearchResults, self).get_context_data(**kwargs)
+        context['form'] = self.form
+        return context

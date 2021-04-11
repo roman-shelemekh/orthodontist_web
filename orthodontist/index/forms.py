@@ -75,3 +75,27 @@ class ProfileUpdateForm(forms.ModelForm):
         labels = {
             "image": "Фото профиля"
         }
+
+SEARCH_OPTIONS = [
+    ('default', 'заголовку и содержанию'),
+    ('question_title', 'заголовку'),
+    ('question_text', 'содержанию'),
+    ('question_author', 'автору'),
+]
+
+ORDER_BY = [
+    ('new', 'дате - сначала новые'),
+    ('old', 'дате - сначала старые'),
+    ('popular', 'популярности'),
+    ('answers', 'обсуждаемости')
+]
+
+class SearchForm(forms.Form):
+    search_input = forms.CharField(required=False, max_length=255, widget=forms.TextInput(
+                                                        attrs={'class': 'form-control me-2', 'placeholder': 'Поиск'}),
+                                   label='Ключевое слово')
+    search_by = forms.ChoiceField(required=False, choices=SEARCH_OPTIONS,
+                                                 widget=forms.Select(attrs={'class': 'form-control'}),
+                                                 label='Искать по')
+    order_by = forms.ChoiceField(required=False, choices=ORDER_BY,
+                                           widget=forms.Select(attrs={'class': 'form-control'}), label='Сортировать по')

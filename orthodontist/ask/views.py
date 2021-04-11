@@ -32,12 +32,13 @@ class AskView(ListView):
             queryset = queryset.order_by('date')
         elif self.form.cleaned_data.get('order_by') == "popular":
             queryset = queryset.order_by('-like_count')
+        elif self.form.cleaned_data.get('order_by') == "answers":
+            queryset = queryset.order_by('-answers_count')
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AskView, self).get_context_data(**kwargs)
         context['form'] = self.form
-        context['order_by'] = self.form.cleaned_data.get('order_by')
         return context
 
 

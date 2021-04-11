@@ -15,12 +15,10 @@
         <a class="btn btn-primary btn-lg" href="{% url 'ask:ask_question' %}" role="button">Задать вопрос</a>
     </div>
 
-    <div>
-        <form class="form-inline" id="orderQuestions">
-            <div class="form-group mx-sm-2 mb-2">
-                <table>{{ form.as_table }}</table>
-                <button type="submit" class="btn btn-primary">Сортировать</button>
-            </div>
+    <div class="row">
+        <form class="d-flex">
+            <table>{{ form.as_table }}</table>
+            <button type="submit" class="btn btn-primary">Сортировать</button>
         </form>
     </div>
 
@@ -56,15 +54,21 @@
     {% endif %}
     </div>
 
+
     {% if question_list %}
     <nav>
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
             <li class="page-item">
-                <a class="page-link text-primary" href="?page=1{% if order_by %}&order_by={{ order_by }}{% endif %}">Первая</a>
+                <a class="page-link text-primary" href="?page=1{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">Первая</a>
             </li>
+            {% if page_obj.number|add:'-2' > 0 %}
             <li class="page-item">
-                <a class="page-link text-primary" href="?page={{ page_obj.previous_page_number }}{% if order_by %}&order_by={{ order_by }}{% endif %}">{{ page_obj.previous_page_number }}</a>
+                <a class="page-link text-primary" href="?page={{ page_obj.number|add:'-2' }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.number|add:'-2' }}</a>
+            </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page={{ page_obj.previous_page_number }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.previous_page_number }}</a>
             </li>
             {% else %}
             <li class="page-item disabled">
@@ -72,17 +76,19 @@
             </li>
             {% endif %}
             <li class="page-item active">
-                <span class="page-link bg-primary">
-                    {{ page_obj.number }}
-                    <span class="sr-only"></span>
-                </span>
+                <span class="page-link bg-primary">{{ page_obj.number }}</span>
             </li>
             {% if page_obj.has_next %}
             <li class="page-item">
-                <a class="page-link text-primary" href="?page={{ page_obj.next_page_number }}{% if order_by %}&order_by={{ order_by }}{% endif %}">{{ page_obj.next_page_number }}</a>
+                <a class="page-link text-primary" href="?page={{ page_obj.next_page_number }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.next_page_number }}</a>
             </li>
+            {% if page_obj.number|add:'2' > 0 %}
             <li class="page-item">
-                <a class="page-link text-primary" href="?&page={{ page_obj.paginator.num_pages }}{% if order_by %}&order_by={{ order_by }}{% endif %}">Последняя</a>
+                <a class="page-link text-primary" href="?page={{ page_obj.number|add:'2' }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.number|add:'2' }}</a>
+            </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?&page={{ page_obj.paginator.num_pages }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">Последняя</a>
             </li>
             {% else %}
             <li class="page-item disabled">
