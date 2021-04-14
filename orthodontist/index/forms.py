@@ -8,8 +8,8 @@ from .models import Profile
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'type': 'email',
-                                                                'placeholder':'Электронный адрес'}))
-    remember_me = forms.BooleanField(widget=forms.CheckboxInput(attrs={'type':'checkbox'}), label='Запомнить меня',
+                                                                'placeholder': 'Электронный адрес'}))
+    remember_me = forms.BooleanField(widget=forms.CheckboxInput(attrs={'type': 'checkbox'}), label='Запомнить меня',
                                          required=False)
 
     class Meta:

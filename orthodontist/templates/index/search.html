@@ -5,9 +5,6 @@
 {% block content %}
 {% load my_tags %}
 <main class="container">
-    <div class="row text-center py-3">
-        <h1>Результаты поиска:</h1>
-    </div>
     <form>
         <div class="row g-3 align-items-end pb-3 justify-content-center">
             <div class="col-auto">{{ form.search_input.label }}{{ form.search_input }}</div>
@@ -16,6 +13,9 @@
             <div class="col-auto"><button type="submit" class="btn btn-primary">Поиск</button></div>
         </div>
     </form>
+    <div class="row text-center py-3">
+        <h1>Результаты поиска:</h1>
+    </div>
     {% if question_list %}
     {% for question in question_list %}
     <div class="row justify-content-center pb-2">

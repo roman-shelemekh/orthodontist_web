@@ -3,15 +3,10 @@
 {% block title %}Задать вопрос | {{ block.super }}{% endblock %}
 
 {% block content %}
-
-<main role="main">
-    <div class="container">
-        <form method="post">{% csrf_token %}
-            {{ form.as_p }}
-
-            <input class="btn btn-primary" type="submit" value="Задать вопрос">
-        </form>
-    </div>
+<main class="container">
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-primary" type="submit" value="Задать вопрос">
+    </form>
 </main>
-
 {% endblock %}

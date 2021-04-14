@@ -5,57 +5,42 @@
 {% block content %}
 <main class="container">
     {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-success" role="alert">{{ message }}</div>
-        {% endfor %}
+    {% for message in messages %}
+    <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endfor %}
     {% endif %}
-
-    <div class="text-center" style="margin: 20px;">
-        <h1>Задайте вопрос врачу-ортодонту</h1>
-        <a class="btn btn-primary btn-lg" href="{% url 'ask:ask_question' %}" role="button">Задать вопрос</a>
-    </div>
-
-    <div class="row">
-        <form class="d-flex">
-            <table>{{ form.as_table }}</table>
-            <button type="submit" class="btn btn-primary">Сортировать</button>
-        </form>
-    </div>
-
-    <div>
     {% if question_list %}
-        {% for question in question_list %}
-        <div class="row justify-content-center">
-            <div class="card" style="margin: 10px; width: 50rem;">
+    <form>
+        <div class="row justify-content-center align-items-center g-2">
+            <div class="col-auto">Сортировать по</div>
+            <div class="col-auto">{{ form.order_by }}</div>
+            <div class="col-auto"><button type="submit" class="btn btn-primary">Сортировать</button></div>
+        </div>
+    </form>
+    {% for question in question_list %}
+    <div class="row justify-content-center my-3">
+        <div class="col-sm col-md-10">
+            <div class="card">
                 <div class="card-body">
-                    <div class="mask" style="float:left">
-                        <img src="{{ question.author.profile.image.url }}" class="card-img-top" alt="...">
-                    </div>
-                    <div style="margin: 40px">
-                        {% if question.author.id %}
-                        <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author }}</a></h6>
-                        {% endif %}
-                        <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">Ответов: {{ question.answers_count }}</h6>
+                    <div class="clearfix">
+                        <div class="user-pic-question float-start mb-3">
+                            <img src="{{ question.author.profile.image.url }}" alt="{{ question.author }}">
+                        </div>
+                        <div class="float-start mt-3 ms-3">
+                            <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author }}</a></h6>
+                            <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date|date:"j E Y" }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted">Ответов: {{ question.answers_count }}</h6>
+                        </div>
                     </div>
                     <h5 class="card-title">{{ question.title }}</h5>
                     <p class="card-text">{{ question.text }}</p>
-                    <a href="{% url 'ask:question' question.id %}" class="btn btn-primary">Посмотреть ответы</a>
-
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %}" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}">Нравится: <span class="like_count">{{ question.like.count }}</span></button>
-                    </div>
+                    <a href="{% url 'ask:question' question.id %}" class="btn btn-primary">Перейти к вопросу</a>
+                    <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %} float-end" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}"><i class="far fa-thumbs-up"></i> <span class="like_count">{{ question.like.count }}</span></button>
                 </div>
             </div>
         </div>
-        {% endfor %}
-    {% else %}
-            <p>Здесь еще нет вопросов.</p>
-    {% endif %}
     </div>
-
-
-    {% if question_list %}
+    {% endfor %}
     <nav>
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}
@@ -97,8 +82,9 @@
             {% endif %}
         </ul>
     </nav>
+    {% else %}
+    <p>Здесь пока нет вопросов.</p>
     {% endif %}
-
 </main>
 
 {% endblock %}

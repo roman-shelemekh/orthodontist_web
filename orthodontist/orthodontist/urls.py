@@ -29,7 +29,7 @@ urlpatterns = [
     path('user/update/', views.user_update, name='update'),
     path('admin/', admin.site.urls),
     path('search/', views.SearchResults.as_view(), name='search'),
-    path('ask/', include('ask.urls')),
+    path('question/', include('ask.urls')),
 ]
 
 if bool(settings.DEBUG):

@@ -82,25 +82,31 @@ class AskQuestionView(FormView):
 
 def delete_question(request, pk):
     question = get_object_or_404(Question, pk=pk)
-    _, deleted = question.delete()
-    messages.success(
-        request, f'Вопрос "{question.title}" и все ответы на него ({deleted.get("ask.Answer")}) были успешно удалены'
-    )
-    return HttpResponseRedirect(reverse('ask:index'))
+    if request.user == question.author:
+        _, deleted = question.delete()
+        messages.success(
+            request, f'Вопрос "{question.title}" и все ответы на него ({deleted.get("ask.Answer", "0")}) были успешно удалены'
+        )
+        return HttpResponseRedirect(reverse('ask:index'))
+    else:
+        raise Http404()
+
 
 
 def delete_answer(request, pk):
     answer = get_object_or_404(Answer, pk=pk)
-    answer.delete()
-    messages.success(request, f'Ответ был успешно удален')
-    return HttpResponseRedirect(reverse('ask:question', args=[answer.question.id]))
+    if request.user == answer.author:
+        answer.delete()
+        messages.success(request, f'Ответ был успешно удален')
+        return HttpResponseRedirect(reverse('ask:question', args=[answer.question.id]))
+    else:
+        raise Http404()
 
 
 def like_question(request, pk):
     if request.is_ajax():
         user = request.user
         if user.is_authenticated:
-            # question = Question.objects.get(pk=pk)
             question = get_object_or_404(Question, pk=pk)
             if user not in question.like.all():
                 question.like.add(user)

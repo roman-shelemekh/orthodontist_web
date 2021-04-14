@@ -5,29 +5,29 @@
 {% block content %}
 <main class="container">
     {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-success" role="alert">{{ message }}</div>
-        {% endfor %}
+    {% for message in messages %}
+    <div class="alert alert-success" role="alert">{{ message }}</div>
+    {% endfor %}
     {% endif %}
-    <div class="row justify-content-center">
-        <div class="card" style="margin: 10px; width: 50rem;">
-            <div class="card-body">
-                <div class="mask" style="float:left">
-                    <img src="{{ question.author.profile.image.url }}" class="card-img-top" alt="...">
-                </div>
-                <div style="margin: 55px">
-                    {% if question.author.id %}
-                    <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author }}</a></h6>
-                    {% endif %}
-                    <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
-                </div>
-                <h5 class="card-title">{{ question.title }}</h5>
-                <p class="card-text">{{ question.text }}</p>
-                {% if user.id == question.author.id %}
-                <a href="{% url 'ask:delete_question' question.id %}" class="card-link">Удалить</a>
-                {% endif %}
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button class="like-btn btn btn-sm btn-primary" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}">Нравится: <span class="like_count">{{ question.like.count }}</span></button>
+    <div class="row justify-content-center my-3">
+        <div class="col-sm col-md-10">
+            <div class="card">
+                <div class="card-body">
+                   <div class="clearfix">
+                       {% if user.id == question.author.id %}
+                       <a href="{% url 'ask:delete_question' question.id %}" class="float-end" style="color:gray"><i class="far fa-trash-alt"></i></a>
+                       {% endif %}
+                       <div class="user-pic-question float-start mb-3">
+                           <img src="{{ question.author.profile.image.url }}" alt="{{ question.author }}">
+                       </div>
+                       <div class="float-start mt-4 pt-2 ms-3">
+                           <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author }}</a></h6>
+                           <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date|date:"j E Y" }}</h6>
+                       </div>
+                    </div>
+                    <h5 class="card-title">{{ question.title }}</h5>
+                    <p class="card-text">{{ question.text }}</p>
+                    <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %} float-end" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}"><i class="far fa-thumbs-up"></i> <span class="like_count">{{ question.like.count }}</span></button>
                 </div>
             </div>
         </div>
@@ -36,50 +36,50 @@
         <h3>Ответы:</h3>
     </div>
     {% if question.answer_set.all %}
-    <div class="row justify-content-center">
-        {% for answer in question.answer_set.all %}
-        <div class="card" style="margin: -1px; width: 50rem;">
-            <div class="card-body">
-                <div class="reply-mask" style="float:left">
-                    <img src="{{ answer.author.profile.image.url }}" class="card-img-top" alt="...">
-                </div>
-                <div style="margin: 15px">
-                    {% if answer.author.id %}
-                    <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' answer.author.id %}">{{ answer.author }}</a></h6>
-                    {% endif %}
-                    <h6 class="card-subtitle mb-2 text-muted">Дата: {{ answer.date }}</h6>
-                </div>
-                <p class="card-text">{{ answer.text }}</p>
+    {% for answer in question.answer_set.all %}
+    <div class="row justify-content-center my-3">
+        <div class="col-sm col-md-9">
+            <div class="clearfix">
                 {% if user.id == answer.author.id %}
-                <a href="{% url 'ask:delete_answer' answer.id %}" class="card-link">Удалить</a>
+                <a href="{% url 'ask:delete_answer' answer.id %}" class="float-end me-2" style="color:gray"><i class="far fa-trash-alt"></i></a>
                 {% endif %}
+                <div class="user-pic-answer float-start mb-3">
+                    <img src="{{ answer.author.profile.image.url }}" alt="{{ answer.author }}">
+                </div>
+                <div class="float-start mt-1 ms-3">
+                    <h6 class="mb-1 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' answer.author.id %}">{{ answer.author }}</a></h6>
+                    <h6 class="mb-1 text-muted">Дата: {{ answer.date|date:"j E Y" }}</h6>
+                </div>
             </div>
+            <p class="mx-2">{{ answer.text }}</p>
+            <hr>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
     {% else %}
     <div class="text-center">
         <p>Пока здесь нет ответов. Вы можете стать первым</p>
     </div>
     {% endif %}
-    <div class="text-center" style="margin-top: 20px;">
+    <div class="text-center">
         <h3>Предложите свой ответ:</h3>
     </div>
-
     {% if user.is_authenticated %}
     <div class="row justify-content-center">
-        <form method="post" style="margin: 10px; width: 51rem;">{% csrf_token %}
+        <div class="col-md-9">
+            <form method="post">
+                {% csrf_token %}
                 {{ reply_form.text }}
-                <input class="btn btn-primary" type="submit" value="Ответить" style="margin-top: 20px;">
-        </form>
+                <input class="btn btn-primary my-2" type="submit" value="Ответить"">
+            </form>
+        </div>
     </div>
     {% else %}
-    <div class="row text-center" style="margin: 20px;">
+    <div class="row text-center my-3">
         <p>Для добавления ответа Вам необходимо <a href="{% url 'login' %}?next={% url 'ask:question' question.id %}">войти на сайт</a> или <a href="{% url 'signup' %}">зарегистрироваться</a>.</p>
     </div>
     {% endif %}
 </main>
-
 {% endblock %}
 {% load static %}
 {% block script %}
