@@ -1,37 +1,30 @@
-{% extends "base.html" %}
+{% extends "user_base.html" %}
 
-{% block title %} Изменить профиль | {{ block.super }}{% endblock %}
 
-{% block content %}
-<main class="container">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4"></div>
-            <div class="col-md-4">
-                <form class="signup" action="" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <h1 class="h3 mb-3 fw-normal">Изменить профиль</h1>
-                    {{ u_form.username.label }}
-                    {{ u_form.username }}
-                    {{ u_form.email.label }}
-                    {{ u_form.email }}
-                    {{ p_form.image.label }}<br>
-                    {{ p_form.image }}
-                    <button class="w-100 btn btn-lg btn-primary" type="submit">Изменить</button>
-                    {% for field in u_form %}
-                    {% if field.errors %}
-                    <dev class="text-center" style="color: red;">{{ field.errors }}</dev>
-                    {% endif %}
-                    {% endfor %}
-                    {% for field in p_form %}
-                    {% if field.errors %}
-                    <dev class="text-center" style="color: red;">{{ field.errors }}</dev>
-                    {% endif %}
-                    {% endfor %}
+{% block user_questions %}
+
+                    <div class="mb-3">
+                        <h5>Изменить профиль</h5>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</main>
+                    <form class="signup" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ u_form.username.label }}
+                        {{ u_form.username }}
+                        {{ u_form.email.label }}
+                        {{ u_form.email }}
+                        {{ p_form.image.label }}<br>
+                        {{ p_form.image }}
+                        <button class="w-100 btn btn-lg btn-primary" type="submit">Сохранить изменения</button>
+                        {% for field in u_form %}
+                        {% if field.errors %}
+                        <div class="text-center" style="color: red;">{{ field.errors }}</div>
+                        {% endif %}
+                        {% endfor %}
+                        {% for field in p_form %}
+                        {% if field.errors %}
+                        <div class="text-center" style="color: red;">{{ field.errors }}</div>
+                        {% endif %}
+                        {% endfor %}
+                    </form>
+
 {% endblock %}

@@ -1,15 +1,14 @@
-from django.shortcuts import render
 from django.urls import reverse
-from django.http import HttpResponseRedirect, Http404, JsonResponse, HttpResponse
+from django.http import HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import get_object_or_404
-from .models import Question, Answer
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import FormView
-from .forms import AskQuestionForm, ReplyForm, OrderByForm
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.db.models import Count
-from django.contrib import messages
+from .models import Question, Answer
+from .forms import AskQuestionForm, ReplyForm, OrderByForm
 
 
 class AskView(ListView):
@@ -24,8 +23,6 @@ class AskView(ListView):
 
     def get_queryset(self):
         queryset = Question.objects.all()
-        queryset = queryset.annotate(answers_count=Count('answer__id'))
-        queryset = queryset.annotate(like_count=Count('like__id'))
         if not self.form.cleaned_data.get('order_by') or self.form.cleaned_data.get('order_by') == "new":
             queryset = queryset.order_by('-date')
         elif self.form.cleaned_data.get('order_by') == "old":
@@ -34,6 +31,8 @@ class AskView(ListView):
             queryset = queryset.order_by('-like_count')
         elif self.form.cleaned_data.get('order_by') == "answers":
             queryset = queryset.order_by('-answers_count')
+        queryset = queryset.annotate(answers_count=Count('answer__id'))
+        queryset = queryset.annotate(like_count=Count('like__id'))
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -70,12 +69,11 @@ class QuestionDetail(DetailView):
 class AskQuestionView(FormView):
     template_name = 'ask/ask_question.html'
     form_class = AskQuestionForm
-    success_url = '/ask/'
+    success_url = '/question/'
 
 
     def form_valid(self, form):
         form.cleaned_data['author'] = self.request.user
-        print(form.cleaned_data)
         form.save()
         return super().form_valid(form)
 

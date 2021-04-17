@@ -1,77 +1,62 @@
-{% extends "base.html" %}
-
-{% block title %} Мой профиль | {{ block.super }}{% endblock %}
-
-{% block content %}
-<main class="container">
-    <div class="row">
-        <div class="col-md-5">
-            <div class="text-center" style="margin-bottom: 18px;">
-                <h3>Профиль пользователя</h3>
+{% extends "user_base.html" %}
+{% block user_questions %}
+            <div class="mb-3">
+                <h5>Последние вопросы от пользователя {{ userdata.username }}</h5>
             </div>
-            <div class="card mb-3" style="max-width: 540px;">
-                {% if messages %}
-                    {% for message in messages %}
-                    <div class="alert alert-success" role="alert">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-                <div class="row g-0">
-                    <div class="col-md-4">
-                    <img class="img-thumbnail" src="{{ userdata.profile.image.url }}" alt="profile-pic">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ userdata.username }}</h5>
-                            <p class="card-text">
-                                <small class="text-muted">
-                                    {% if userdata.profile.online %}
-                                        Сейчас на сайте
-                                    {% else %}
-                                        {% if userdata.profile.last_seen %}
-                                        Заходил {{ userdata.profile.last_seen|timesince }} назад
-                                        {% else %}
-                                        Заходил давно
-                                        {% endif %}
-                                    {% endif %}
-                                </small>
-                            </p>
-                            <p class="card-text">ID пользователя: {{ userdata.id }}</p>
-                            <p class="card-text">Дата регистрации: {{ userdata.date_joined.date }}</p>
-                            <p class="card-text">Электронная почта: {{ userdata.email }}</p>
-                            <p class="card-text">Репутация: <i class="fas fa-award"></i> {{ rating }}</p>
-                            {% if user == userdata %}
-                            <a class="btn btn-primary btn-small" href="{% url 'update' %}" role="button">Изменить профиль</a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-7">
-            <div class="text-center">
-                <h3>Вопросы от пользователя {{ userdata.username }}</h3>
-            </div>
-
             {% if userdata.question_set.all %}
-            {% for question in user_questions %}
-
-            <div class="row justify-content-center">
-                <div class="card" style="margin: 10px; width: 50rem;">
-                    <div class="card-body">
-                        <div style="">
-                            <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
-                            <h6 class="card-subtitle mb-2 text-muted">Ответов: {{ question.answers_count }}</h6>
-                        </div>
-                        <h5 class="card-title">{{ question.title }}</h5>
-                        <a href="{% url 'ask:question' question.id %}" class="btn btn-primary btn-sm">Перейти к вопросу</a>
-                    </div>
+            {% for question in page_obj %}
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Ответы: {{ question.answers_count }}</h6>
+                    <h5 class="card-title"><a style="color: black; text-decoration: none;" href="{% url 'ask:question' question.id %}">{{ question.title }}</a></h5>
+                    <p class="card-text">{{ question.text }}</p>
+                    <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %} float-end" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}"><i class="far fa-thumbs-up"></i> <span class="like_count">{{ question.like.count }}</span></button>
                 </div>
             </div>
             {% endfor %}
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link text-primary" href="?page=1">Первая</a>
+                    </li>
+                    {% if page_obj.number|add:'-2' > 0 %}
+                    <li class="page-item">
+                        <a class="page-link text-primary" href="?page={{ page_obj.number|add:'-2' }}">{{ page_obj.number|add:'-2' }}</a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item">
+                        <a class="page-link text-primary" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link text-primary" href="#" disabled>Первая</a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active">
+                        <span class="page-link bg-primary">{{ page_obj.number }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link text-primary" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                    </li>
+                    {% if page_obj.number|add:'2' <= page_obj.paginator.num_pages %}
+                    <li class="page-item">
+                        <a class="page-link text-primary" href="?page={{ page_obj.number|add:'2' }}">{{ page_obj.number|add:'2' }}</a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item">
+                        <a class="page-link text-primary" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link text-primary" href="#">Последняя</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
             {% else %}
-                    <p>Пользователь {{ userdata.username }} пока не задавал вопросы.</p>
+            <p>Пользователь {{ userdata.username }} пока не задавал вопросы.</p>
             {% endif %}
-        </div>
-    </div>
-</main>
 {% endblock %}

@@ -67,7 +67,7 @@
             <li class="page-item">
                 <a class="page-link text-primary" href="?page={{ page_obj.next_page_number }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.next_page_number }}</a>
             </li>
-            {% if page_obj.number|add:'2' > 0 %}
+            {% if page_obj.number|add:'2' <= page_obj.paginator.num_pages %}
             <li class="page-item">
                 <a class="page-link text-primary" href="?page={{ page_obj.number|add:'2' }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.number|add:'2' }}</a>
             </li>

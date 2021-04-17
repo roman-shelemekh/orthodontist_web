@@ -1,0 +1,27 @@
+{% extends "user_base.html" %}
+
+
+{% block user_questions %}
+            <div class="mb-3">
+                <h5>Популярные вопросы пользователя {{ userdata.username }}</h5>
+            </div>
+
+            {% if userdata.question_set.all %}
+            {% for question in user_questions %}
+
+            <div class="row">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author }}</a></h6>
+                        <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
+                        <h5 class="card-title"><a style="color: black; text-decoration: none;" href="{% url 'ask:question' question.id %}">{{ question.title }}</a></h5>
+                        <p class="card-text">{{ question.text }}</p>
+                        <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %} float-end" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}"><i class="far fa-thumbs-up"></i> <span class="like_count">{{ question.like.count }}</span></button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+                    <p>Пользователь {{ userdata.username }} пока не задавал вопросы.</p>
+            {% endif %}
+{% endblock %}

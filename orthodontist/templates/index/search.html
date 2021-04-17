@@ -21,9 +21,7 @@
     <div class="row justify-content-center pb-2">
         <div class="card">
             <div class="card-body">
-                {% if question.author.id %}
                 <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author|highlight_search:request.GET.search_input }}</a></h6>
-                {% endif %}
                 <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
                 <h5 class="card-title"><a style="color: black; text-decoration: none;" href="{% url 'ask:question' question.id %}">{{ question.title|highlight_search:request.GET.search_input }}</a></h5>
                 <p class="card-text">{{ question.text|highlight_search:request.GET.search_input }}</p>
@@ -35,7 +33,7 @@
             <p>По Вашему запросу нет результатов.</p>
     {% endif %}
 
-
+    {{ page_obj.paginator.num_pages }}
     {% if question_list %}
     <nav>
         <ul class="pagination justify-content-center">
@@ -63,7 +61,7 @@
             <li class="page-item">
                 <a class="page-link text-primary" href="?page={{ page_obj.next_page_number }}&search_input={{ request.GET.search_input }}{% if request.GET.search_by %}&search_by={{ request.GET.search_by }}{% endif %}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.next_page_number }}</a>
             </li>
-            {% if page_obj.number|add:'2' > 0 %}
+            {% if page_obj.number|add:'2' <= page_obj.paginator.num_pages %}
             <li class="page-item">
                 <a class="page-link text-primary" href="?page={{ page_obj.number|add:'2' }}&search_input={{ request.GET.search_input }}{% if request.GET.search_by %}&search_by={{ request.GET.search_by }}{% endif %}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.number|add:'2' }}</a>
             </li>

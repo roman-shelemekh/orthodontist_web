@@ -8,7 +8,7 @@ body {
 
 .errorlist li {
     list-style-type: none;
-    color: red;
+    color: #ff0000;
     margin-left: -30px;
 }
 
@@ -44,13 +44,4 @@ body {
 img {
     max-width: 100%;
 
-}
-
-.reply-mask {
-  display: inline-block;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 10px;
 }

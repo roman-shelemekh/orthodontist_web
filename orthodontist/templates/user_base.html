@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %} Мой профиль | {{ block.super }}{% endblock %}
+
+{% block content %}
+<main class="container">
+
+    <div class="row p-3 m-3 align-items-center border-bottom">
+        <div class="col-md-2">
+            <div  class="user-pic-question">
+                <img src="{{ userdata.profile.image.url }}" alt="profile-pic">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <h3>{{ userdata.username }}</h3>
+            <small class="text-muted">
+                {% if userdata.profile.online %}
+                Сейчас на сайте
+                {% else %}
+                {% if userdata.profile.last_seen %}
+                Заходил(-a) {{ userdata.profile.last_seen|timesince }} назад
+                {% else %}
+                Заходил(-a) давно
+                {% endif %}
+                {% endif %}
+            </small>
+        </div>
+        <div class="col-md-3">
+            <small class="text-muted"><i class="far fa-question-circle"></i> Вопросы: {{ userdata.question_set.all.count }}</small>
+        </div>
+        <div class="col-md-3">
+            <small class="text-muted"><i class="fas fa-award"></i> Репутация: {{ rating }}</small>
+        </div>
+        {% if user == userdata %}
+        <div class="col-md-1 ms-md-auto">
+        <a class="btn btn-outline-primary btn-sm mt-3" href="{% url 'update' userdata.id %}" role="button"><i class="fas fa-user-cog"></i></a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="row p-3 m-3">
+        <div class="col-md-3">
+            <nav class="nav flex-column  border-bottom me-4">
+                <a class="nav-link" href="{% url 'user' userdata.id %}">Последние вопросы</a>
+                <a class="nav-link" href="{% url 'user_popular' userdata.id %}">Популярные вопросы</a>
+                {% if user == userdata %}
+                <a class="nav-link" href="{% url 'update' userdata.id %}">Настройки</a>
+                {% endif %}
+            </nav>
+            <div class="mt-3"><small class="text-muted">ID пользователя: {{ userdata.id }}</small></div>
+            <div class="mt-2 mb-4"><small class="text-muted">Присоединился {{ userdata.date_joined.date }}</small></div>
+        </div>
+        <div class="col-md-9">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success" role="alert">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% block user_questions %}{% endblock %}
+        </div>
+    </div>
+</main>
+{% endblock %}
+{% load static %}
+{% block script %}
+<script src="{% static 'index/main.js' %}"></script>
+{% endblock %}
