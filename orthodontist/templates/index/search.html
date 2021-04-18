@@ -21,7 +21,7 @@
     <div class="row justify-content-center pb-2">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author|highlight_search:request.GET.search_input }}</a></h6>
+                <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author.first_name|highlight_search:request.GET.search_input }} {{ question.author.last_name|highlight_search:request.GET.search_input }}</a></h6>
                 <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
                 <h5 class="card-title"><a style="color: black; text-decoration: none;" href="{% url 'ask:question' question.id %}">{{ question.title|highlight_search:request.GET.search_input }}</a></h5>
                 <p class="card-text">{{ question.text|highlight_search:request.GET.search_input }}</p>

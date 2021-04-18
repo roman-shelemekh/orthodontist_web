@@ -143,7 +143,9 @@ class SearchResults(ListView):
         elif self.form.cleaned_data.get('search_by') == "question_text":
             queryset = queryset.filter(text__icontains=self.form.cleaned_data.get('search_input'))
         elif self.form.cleaned_data.get('search_by') == "question_author":
-            queryset = queryset.filter(author__username=self.form.cleaned_data.get('search_input'))
+            filter = '|'.join(self.form.cleaned_data.get('search_input').split())
+            queryset = queryset.filter(Q(author__first_name__iregex=filter) | Q(author__last_name__iregex=filter))
+            # queryset = queryset.filter(author__username=self.form.cleaned_data.get('search_input'))
         if not self.form.cleaned_data.get('order_by') or self.form.cleaned_data.get('order_by') == "new":
             queryset = queryset.order_by('-date')
         elif self.form.cleaned_data.get('order_by') == "old":

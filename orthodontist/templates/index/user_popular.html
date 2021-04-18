@@ -15,6 +15,7 @@
                 </div>
             </div>
             {% endfor %}
+            {% if page_obj.paginator.num_pages > 1 %}
             <nav>
                 <ul class="pagination justify-content-center">
                     {% if page_obj.has_previous %}
@@ -56,6 +57,7 @@
                     {% endif %}
                 </ul>
             </nav>
+            {% endif %}
             {% else %}
             <p>Пользователь {{ userdata.first_name }} пока не задавал вопросы.</p>
             {% endif %}
