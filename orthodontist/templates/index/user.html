@@ -1,7 +1,7 @@
 {% extends "user_base.html" %}
 {% block user_questions %}
             <div class="mb-3">
-                <h5>Последние вопросы от пользователя {{ userdata.username }}</h5>
+                <h5>Последние вопросы от пользователя {{ userdata.first_name }}</h5>
             </div>
             {% if userdata.question_set.all %}
             {% for question in page_obj %}
@@ -15,6 +15,7 @@
                 </div>
             </div>
             {% endfor %}
+            {% if page_obj.paginator.num_pages > 1 %}
             <nav>
                 <ul class="pagination justify-content-center">
                     {% if page_obj.has_previous %}
@@ -56,7 +57,8 @@
                     {% endif %}
                 </ul>
             </nav>
+            {% endif %}
             {% else %}
-            <p>Пользователь {{ userdata.username }} пока не задавал вопросы.</p>
+            <p>Пользователь {{ userdata.first_name }} пока не задавал вопросы.</p>
             {% endif %}
 {% endblock %}

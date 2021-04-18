@@ -1,15 +1,14 @@
 {% extends "user_base.html" %}
-
-
 {% block user_questions %}
-
                     <div class="mb-3">
                         <h5>Изменить профиль</h5>
                     </div>
                     <form class="signup" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ u_form.username.label }}
-                        {{ u_form.username }}
+                        {{ u_form.first_name.label }}
+                        {{ u_form.first_name }}
+                        {{ u_form.last_name.label }}
+                        {{ u_form.last_name }}
                         {{ u_form.email.label }}
                         {{ u_form.email }}
                         {{ p_form.image.label }}<br>
@@ -26,5 +25,4 @@
                         {% endif %}
                         {% endfor %}
                     </form>
-
 {% endblock %}

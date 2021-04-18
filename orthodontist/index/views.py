@@ -45,24 +45,6 @@ def login_view(request):
     return render(request, 'index/login.html', {'form': form})
 
 
-# class UserView(DetailView):
-#     model = User
-#     template_name = 'index/user.html'
-#     context_object_name = 'userdata'
-#
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(UserView, self).get_context_data()
-#         userd = kwargs['object']
-#         user_questions = Question.objects.filter(author=userd).order_by('-date')[:5]
-#         user_questions = user_questions.annotate(answers_count=Count('answer__id'))
-#         context['user_questions'] = user_questions
-#         rating = 0
-#         for question in userd.question_set.all():
-#             rating += question.like.count()
-#         context['rating'] = rating
-#         return context
-
 class UserView(SingleObjectMixin, ListView):
     template_name = 'index/user.html'
     paginate_by = 5
@@ -70,7 +52,6 @@ class UserView(SingleObjectMixin, ListView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object(queryset=User.objects.all())
-        print(self.object)
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -88,27 +69,8 @@ class UserView(SingleObjectMixin, ListView):
         return queryset
 
 
-# class UserViewPopular(DetailView):
-#     model = User
-#     template_name = 'index/user_popular.html'
-#     context_object_name = 'userdata'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(UserViewPopular, self).get_context_data()
-#         userd = kwargs['object']
-#         user_questions = Question.objects.filter(author=userd)
-#         user_questions = user_questions.annotate(like_count=Count('like__id'))
-#         user_questions = user_questions.order_by('-like_count')[:5]
-#         user_questions = user_questions.annotate(answers_count=Count('answer__id'))
-#         context['user_questions'] = user_questions
-#         rating = 0
-#         for question in userd.question_set.all():
-#             rating += question.like.count()
-#         context['rating'] = rating
-#         return context
-
-
 class UserViewPopular(UserView):
+    template_name = 'index/user_popular.html'
 
     def get_queryset(self):
         queryset = self.object.question_set.all()
@@ -117,27 +79,6 @@ class UserViewPopular(UserView):
         queryset = queryset.annotate(answers_count=Count('answer__id'))
         return queryset
 
-
-
-# @method_decorator(login_required, name='dispatch')
-# class UserViewUpdate(DetailView):
-#     model = User
-#     template_name = 'index/user_update.html'
-#     context_object_name = 'userdata'
-#
-#
-#     def get_context_data(self, **kwargs):
-#         context = super(UserViewUpdate, self).get_context_data()
-#         object = kwargs['object']
-#         rating = 0
-#         for question in object.question_set.all():
-#             rating += question.like.count()
-#         context['rating'] = rating
-#         u_form = UserUpdateForm(instance=object)
-#         p_form = ProfileUpdateForm(instance=object.profile)
-#         context['u_form'] = u_form
-#         context['p_form'] = p_form
-#         return context
 
 class UserViewUpdate(DetailView):
     model = User
@@ -161,41 +102,23 @@ class UserViewUpdate(DetailView):
         context['p_form'] = self.p_form
         return context
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        if u_form.is_valid() and p_form.is_valid():
+        emails = User.objects.exclude(id=request.user.id).values_list('email', flat=True)
+        if u_form.is_valid() and p_form.is_valid() and u_form.cleaned_data['email'] not in emails:
             u_form.save()
             p_form.save()
             messages.success(request, 'Ваш профель изменен')
             return HttpResponseRedirect(reverse('user', args=(request.user.id,)))
         else:
+            if u_form.cleaned_data['email'] in emails:
+                u_form.add_error(field='email', error='Пользователь с таким электронным адресом уже существует.')
             self.object = self.get_object()
             context = self.get_context_data(**kwargs)
             context['u_form'] = u_form
             context['p_form'] = p_form
             return render(request, 'index/user_update.html', context)
-
-
-
-# @login_required
-# def user_update_post(request, pk):
-#     print('hello')
-#     if request.method == 'POST':
-#         print('hello2')
-#         u_form = UserUpdateForm(request.POST, instance=request.user)
-#         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-#         if u_form.is_valid() and p_form.is_valid():
-#             print('hello3')
-#             u_form.save()
-#             p_form.save()
-#             messages.success(request, 'Ваш профель изменен')
-#             return HttpResponseRedirect(reverse('user', args=(request.user.id,)))
-#     else:
-#         u_form = UserUpdateForm(instance=request.user)
-#         p_form = ProfileUpdateForm(instance=request.user.profile)
-#     context = {'u_form': u_form, 'p_form': p_form}
-#     return render(request, 'index/user_update.html', context)
 
 
 class SearchResults(ListView):
@@ -213,8 +136,8 @@ class SearchResults(ListView):
         queryset = queryset.annotate(answers_count=Count('answer__id'))
         queryset = queryset.annotate(like_count=Count('like__id'))
         if not self.form.cleaned_data.get('search_by') or self.form.cleaned_data.get('search_by') == "default":
-            queryset = queryset.filter(Q(text__icontains=self.form.cleaned_data.get('search_input')
-                                                 ) | Q(title__icontains=self.form.cleaned_data.get('search_input')))
+            queryset = queryset.filter(Q(text__icontains=self.form.cleaned_data.get('search_input')) |
+                                       Q(title__icontains=self.form.cleaned_data.get('search_input')))
         elif self.form.cleaned_data.get('search_by') == "question_title":
             queryset = queryset.filter(title__icontains=self.form.cleaned_data.get('search_input'))
         elif self.form.cleaned_data.get('search_by') == "question_text":

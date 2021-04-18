@@ -42,7 +42,7 @@
                         {% if user.is_authenticated %}
                         <li class="nav-item dropdown me-2">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Привет, {{ user }}
+                            Привет, {{ user.first_name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url 'user' user.id %}">Профиль <i class="fas fa-user-circle"></i></a></li>

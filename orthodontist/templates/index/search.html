@@ -32,8 +32,6 @@
     {% else %}
             <p>По Вашему запросу нет результатов.</p>
     {% endif %}
-
-    {{ page_obj.paginator.num_pages }}
     {% if question_list %}
     <nav>
         <ul class="pagination justify-content-center">
@@ -77,7 +75,5 @@
         </ul>
     </nav>
     {% endif %}
-
 </main>
-
 {% endblock %}

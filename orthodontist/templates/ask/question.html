@@ -18,10 +18,10 @@
                        <a href="{% url 'ask:delete_question' question.id %}" class="float-end" style="color:gray"><i class="far fa-trash-alt"></i></a>
                        {% endif %}
                        <div class="user-pic-question float-start mb-3">
-                           <img src="{{ question.author.profile.image.url }}" alt="{{ question.author }}">
+                           <img src="{{ question.author.profile.image.url }}" alt="{{ question.author.first_name }}">
                        </div>
                        <div class="float-start mt-4 pt-2 ms-3">
-                           <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author }}</a></h6>
+                           <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author.first_name }}</a></h6>
                            <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date|date:"j E Y" }}</h6>
                        </div>
                     </div>
@@ -44,10 +44,10 @@
                 <a href="{% url 'ask:delete_answer' answer.id %}" class="float-end me-2" style="color:gray"><i class="far fa-trash-alt"></i></a>
                 {% endif %}
                 <div class="user-pic-answer float-start mb-3">
-                    <img src="{{ answer.author.profile.image.url }}" alt="{{ answer.author }}">
+                    <img src="{{ answer.author.profile.image.url }}" alt="{{ answer.author.first_name }}">
                 </div>
                 <div class="float-start mt-1 ms-3">
-                    <h6 class="mb-1 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' answer.author.id %}">{{ answer.author }}</a></h6>
+                    <h6 class="mb-1 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' answer.author.id %}">{{ answer.author.first_name }}</a></h6>
                     <h6 class="mb-1 text-muted">Дата: {{ answer.date|date:"j E Y" }}</h6>
                 </div>
             </div>

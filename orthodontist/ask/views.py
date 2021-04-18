@@ -14,7 +14,7 @@ from .forms import AskQuestionForm, ReplyForm, OrderByForm
 class AskView(ListView):
     model = Question
     template_name = 'ask/index.html'
-    paginate_by = 5
+    paginate_by = 10
 
     def dispatch(self, request, *args, **kwargs):
         self.form = OrderByForm(request.GET)
@@ -23,6 +23,8 @@ class AskView(ListView):
 
     def get_queryset(self):
         queryset = Question.objects.all()
+        queryset = queryset.annotate(answers_count=Count('answer__id'))
+        queryset = queryset.annotate(like_count=Count('like__id'))
         if not self.form.cleaned_data.get('order_by') or self.form.cleaned_data.get('order_by') == "new":
             queryset = queryset.order_by('-date')
         elif self.form.cleaned_data.get('order_by') == "old":
@@ -31,8 +33,6 @@ class AskView(ListView):
             queryset = queryset.order_by('-like_count')
         elif self.form.cleaned_data.get('order_by') == "answers":
             queryset = queryset.order_by('-answers_count')
-        queryset = queryset.annotate(answers_count=Count('answer__id'))
-        queryset = queryset.annotate(like_count=Count('like__id'))
         return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -50,7 +50,7 @@ class QuestionDetail(DetailView):
         self.form = ReplyForm()
         return super(QuestionDetail, self).dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         form = ReplyForm(request.POST)
         if form.is_valid():
             form.cleaned_data['question'] = Question.objects.get(id=kwargs['pk'])
@@ -71,7 +71,6 @@ class AskQuestionView(FormView):
     form_class = AskQuestionForm
     success_url = '/question/'
 
-
     def form_valid(self, form):
         form.cleaned_data['author'] = self.request.user
         form.save()
@@ -83,12 +82,12 @@ def delete_question(request, pk):
     if request.user == question.author:
         _, deleted = question.delete()
         messages.success(
-            request, f'Вопрос "{question.title}" и все ответы на него ({deleted.get("ask.Answer", "0")}) были успешно удалены'
+            request, f'Вопрос "{question.title}" и все ответы на него ({deleted.get("ask.Answer", "0")}) '
+                     f'были успешно удалены'
         )
         return HttpResponseRedirect(reverse('ask:index'))
     else:
         raise Http404()
-
 
 
 def delete_answer(request, pk):
@@ -115,6 +114,6 @@ def like_question(request, pk):
             like_count = question.like.count()
             return JsonResponse({'like_count': like_count, 'add': add})
         else:
-            return JsonResponse({'auth': '/login/?next=/ask/'})
+            return JsonResponse({'auth': '/login/?next=/question/'})
     else:
         raise Http404()

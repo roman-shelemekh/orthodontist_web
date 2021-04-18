@@ -24,10 +24,10 @@
                 <div class="card-body">
                     <div class="clearfix">
                         <div class="user-pic-question float-start mb-3">
-                            <img src="{{ question.author.profile.image.url }}" alt="{{ question.author }}">
+                            <img src="{{ question.author.profile.image.url }}" alt="{{ question.author.first_name }}">
                         </div>
                         <div class="float-start mt-3 ms-3">
-                            <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author }}</a></h6>
+                            <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author.first_name }}</a></h6>
                             <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date|date:"j E Y" }}</h6>
                             <h6 class="card-subtitle mb-2 text-muted">Ответов: {{ question.answers_count }}</h6>
                         </div>
