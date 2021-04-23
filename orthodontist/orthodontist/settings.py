@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -145,3 +146,9 @@ LOGIN_URL = 'login'
 
 USER_ONLINE_TIMEOUT = 60 * 3
 USER_LASTSEEN_TIMEOUT = 60 * 60 * 24 * 7
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}

@@ -14,33 +14,35 @@
         <div class="row justify-content-center align-items-center g-2">
             <div class="col-auto">Сортировать по</div>
             <div class="col-auto">{{ form.order_by }}</div>
-            <div class="col-auto"><button type="submit" class="btn btn-primary">Сортировать</button></div>
+<!--            <div class="col-auto"><button type="submit" class="btn btn-primary">Сортировать</button></div>-->
         </div>
     </form>
-    {% for question in question_list %}
-    <div class="row justify-content-center my-3">
-        <div class="col-sm col-md-10">
-            <div class="card">
-                <div class="card-body">
-                    <div class="clearfix">
-                        <div class="user-pic-question float-start mb-3">
-                            <img src="{{ question.author.profile.image.url }}" alt="{{ question.author.first_name }}">
+    <div id="question-list">
+        {% for question in question_list %}
+        <div class="row justify-content-center my-3">
+            <div class="col-sm col-md-10">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="clearfix">
+                            <div class="user-pic-question float-start mb-3">
+                                <img src="{{ question.author.profile.image.url }}" alt="{{ question.author.first_name }}">
+                            </div>
+                            <div class="float-start mt-3 ms-3">
+                                <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author.first_name }} {{ question.author.last_name }}</a></h6>
+                                <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date|date:"j E Y" }}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted">Ответов: {{ question.answers_count }}</h6>
+                            </div>
                         </div>
-                        <div class="float-start mt-3 ms-3">
-                            <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author.first_name }} {{ question.author.last_name }}</a></h6>
-                            <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date|date:"j E Y" }}</h6>
-                            <h6 class="card-subtitle mb-2 text-muted">Ответов: {{ question.answers_count }}</h6>
-                        </div>
+                        <h5 class="card-title">{{ question.title }}</h5>
+                        <p class="card-text">{{ question.text }}</p>
+                        <a href="{% url 'ask:question' question.id %}" class="btn btn-primary">Перейти к вопросу</a>
+                        <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %} float-end" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}"><i class="far fa-thumbs-up"></i> <span class="like_count">{{ question.like.count }}</span></button>
                     </div>
-                    <h5 class="card-title">{{ question.title }}</h5>
-                    <p class="card-text">{{ question.text }}</p>
-                    <a href="{% url 'ask:question' question.id %}" class="btn btn-primary">Перейти к вопросу</a>
-                    <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %} float-end" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}"><i class="far fa-thumbs-up"></i> <span class="like_count">{{ question.like.count }}</span></button>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
     <nav>
         <ul class="pagination justify-content-center">
             {% if page_obj.has_previous %}

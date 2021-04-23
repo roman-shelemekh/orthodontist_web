@@ -1,5 +1,6 @@
 from django import forms
 from .models import Question, Answer
+from django.urls import reverse
 
 
 class AskQuestionForm(forms.ModelForm):
@@ -47,5 +48,6 @@ ORDER_BY = [
 
 
 class OrderByForm(forms.Form):
-    order_by = forms.ChoiceField(required=False, choices=ORDER_BY,
-                                 widget=forms.Select(attrs={'class': 'form-control'}), label='Сортировать по')
+    order_by = forms.ChoiceField(required=False, choices=ORDER_BY, label='Сортировать по',
+                                 widget=forms.Select(attrs={'class': 'form-control',
+                                                            'data-url': '/question/ajax_sorting/'}))

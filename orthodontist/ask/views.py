@@ -9,6 +9,8 @@ from django.utils.decorators import method_decorator
 from django.db.models import Count
 from .models import Question, Answer
 from .forms import AskQuestionForm, ReplyForm, OrderByForm
+from rest_framework import generics
+from .serializers import QuestionSerializer
 
 
 class AskView(ListView):
@@ -47,6 +49,7 @@ class QuestionDetail(DetailView):
     context_object_name = 'question'
 
     def dispatch(self, request, *args, **kwargs):
+        print(reverse('ask:question_ajax'))
         self.form = ReplyForm()
         return super(QuestionDetail, self).dispatch(request, *args, **kwargs)
 
@@ -117,3 +120,26 @@ def like_question(request, pk):
             return JsonResponse({'auth': '/login/?next=/question/'})
     else:
         raise Http404()
+
+
+class QuestionListAjax(generics.ListAPIView):
+    serializer_class = QuestionSerializer
+
+    def get_queryset(self):
+        order_by = self.request.GET.get('order_by')
+        queryset = Question.objects.all().annotate(answers_count=Count('answer__id'))\
+                                         .annotate(like_count=Count('like__id'))
+        if order_by == 'new':
+            queryset = queryset.order_by('-date')
+        elif order_by == 'old':
+            queryset = queryset.order_by('date')
+        elif order_by == 'popular':
+            queryset = queryset.order_by('-like_count')
+        elif order_by == 'answers':
+            queryset = queryset.order_by('-answers_count')
+        return queryset
+    
+    def get_serializer_context(self):
+        context = super(QuestionListAjax, self).get_serializer_context()
+        context['user'] = self.request.user
+        return context
