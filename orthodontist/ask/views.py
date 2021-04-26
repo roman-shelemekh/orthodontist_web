@@ -129,7 +129,7 @@ class QuestionListAjax(generics.ListAPIView):
         order_by = self.request.GET.get('order_by')
         queryset = Question.objects.all().annotate(answers_count=Count('answer__id'))\
                                          .annotate(like_count=Count('like__id'))
-        if order_by == 'new':
+        if not order_by or order_by == 'new':
             queryset = queryset.order_by('-date')
         elif order_by == 'old':
             queryset = queryset.order_by('date')
