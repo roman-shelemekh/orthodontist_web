@@ -9,86 +9,17 @@
     <div class="alert alert-success" role="alert">{{ message }}</div>
     {% endfor %}
     {% endif %}
-    {% if question_list %}
     <form>
         <div class="row justify-content-center align-items-center g-2">
             <div class="col-auto">Сортировать по</div>
             <div class="col-auto">{{ form.order_by }}</div>
-<!--            <div class="col-auto"><button type="submit" class="btn btn-primary">Сортировать</button></div>-->
         </div>
     </form>
-    <div id="question-list" data-url="{% url 'ask:question_ajax' %}">
-<!--        {% for question in question_list %}-->
-<!--        <div class="row justify-content-center my-3">-->
-<!--            <div class="col-sm col-md-10">-->
-<!--                <div class="card">-->
-<!--                    <div class="card-body">-->
-<!--                        <div class="clearfix">-->
-<!--                            <div class="user-pic-question float-start mb-3">-->
-<!--                                <img src="{{ question.author.profile.image.url }}" alt="{{ question.author.first_name }}">-->
-<!--                            </div>-->
-<!--                            <div class="float-start mt-3 ms-3">-->
-<!--                                <h6 class="card-subtitle mb-2 text-muted">Автор: <a style="color: gray; text-decoration: none;" href="{% url 'user' question.author.id %}">{{ question.author.first_name }} {{ question.author.last_name }}</a></h6>-->
-<!--                                <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date|date:"j E Y" }}</h6>-->
-<!--                                <h6 class="card-subtitle mb-2 text-muted">Ответов: {{ question.answers_count }}</h6>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <h5 class="card-title">{{ question.title }}</h5>-->
-<!--                        <p class="card-text">{{ question.text }}</p>-->
-<!--                        <a href="{% url 'ask:question' question.id %}" class="btn btn-primary">Перейти к вопросу</a>-->
-<!--                        <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %} float-end" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}"><i class="far fa-thumbs-up"></i> <span class="like_count">{{ question.like.count }}</span></button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        {% endfor %}-->
-    </div>
+    <div id="question-list" data-url="{% url 'ask:question_ajax' %}"></div>
     <nav>
-        <ul class="pagination justify-content-center" id="pagination">
-<!--            {% if page_obj.has_previous %}-->
-<!--            <li class="page-item">-->
-<!--                <a class="page-link text-primary" href="?page=1{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">Первая</a>-->
-<!--            </li>-->
-<!--            {% if page_obj.number|add:'-2' > 0 %}-->
-<!--            <li class="page-item">-->
-<!--                <a class="page-link text-primary" href="?page={{ page_obj.number|add:'-2' }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.number|add:'-2' }}</a>-->
-<!--            </li>-->
-<!--            {% endif %}-->
-<!--            <li class="page-item">-->
-<!--                <a class="page-link text-primary" href="?page={{ page_obj.previous_page_number }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.previous_page_number }}</a>-->
-<!--            </li>-->
-<!--            {% else %}-->
-<!--            <li class="page-item disabled">-->
-<!--                <a class="page-link text-primary" href="#" disabled>Первая</a>-->
-<!--            </li>-->
-<!--            {% endif %}-->
-<!--            <li class="page-item active">-->
-<!--                <span class="page-link bg-primary">{{ page_obj.number }}</span>-->
-<!--            </li>-->
-<!--            {% if page_obj.has_next %}-->
-<!--            <li class="page-item">-->
-<!--                <a class="page-link text-primary" href="?page={{ page_obj.next_page_number }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.next_page_number }}</a>-->
-<!--            </li>-->
-<!--            {% if page_obj.number|add:'2' <= page_obj.paginator.num_pages %}-->
-<!--            <li class="page-item">-->
-<!--                <a class="page-link text-primary" href="?page={{ page_obj.number|add:'2' }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">{{ page_obj.number|add:'2' }}</a>-->
-<!--            </li>-->
-<!--            {% endif %}-->
-<!--            <li class="page-item">-->
-<!--                <a class="page-link text-primary" href="?&page={{ page_obj.paginator.num_pages }}{% if request.GET.order_by %}&order_by={{ request.GET.order_by }}{% endif %}">Последняя</a>-->
-<!--            </li>-->
-<!--            {% else %}-->
-<!--            <li class="page-item disabled">-->
-<!--                <a class="page-link text-primary" href="#">Последняя</a>-->
-<!--            </li>-->
-<!--            {% endif %}-->
-        </ul>
+        <ul class="pagination justify-content-center" id="pagination"></ul>
     </nav>
-    {% else %}
-    <p>Здесь пока нет вопросов.</p>
-    {% endif %}
 </main>
-
 {% endblock %}
 {% load static %}
 {% block script %}

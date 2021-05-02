@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from django.views.generic.edit import FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -13,29 +13,13 @@ from rest_framework import generics
 from .serializers import QuestionSerializer
 
 
-class AskView(ListView):
-    model = Question
+class AskView(TemplateView):
     template_name = 'ask/index.html'
-    paginate_by = 10
 
     def dispatch(self, request, *args, **kwargs):
         self.form = OrderByForm(request.GET)
         self.form.is_valid()
         return super(AskView, self).dispatch(request, *args, **kwargs)
-
-    def get_queryset(self):
-        queryset = Question.objects.all()
-        queryset = queryset.annotate(answers_count=Count('answer__id'))
-        queryset = queryset.annotate(like_count=Count('like__id'))
-        if not self.form.cleaned_data.get('order_by') or self.form.cleaned_data.get('order_by') == "new":
-            queryset = queryset.order_by('-date')
-        elif self.form.cleaned_data.get('order_by') == "old":
-            queryset = queryset.order_by('date')
-        elif self.form.cleaned_data.get('order_by') == "popular":
-            queryset = queryset.order_by('-like_count')
-        elif self.form.cleaned_data.get('order_by') == "answers":
-            queryset = queryset.order_by('-answers_count')
-        return queryset
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(AskView, self).get_context_data(**kwargs)
