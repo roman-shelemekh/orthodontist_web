@@ -28,7 +28,7 @@
                     </div>
                     <div id="edit-field">
                         <h5 class="card-title">{{ question.title }}</h5>
-                        <p class="card-text">{{ question.text }}</p>
+                        <p class="card-text support-line-breaks">{{ question.text }}</p>
                     </div>
 
                     <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %} float-end" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}"><i class="far fa-thumbs-up"></i> <span class="like_count">{{ question.like.count }}</span></button>
@@ -55,7 +55,7 @@
                     <h6 class="mb-1 text-muted">Дата: {{ answer.date|date:"j E Y" }}</h6>
                 </div>
             </div>
-            <p class="mx-2">{{ answer.text }}</p>
+            <p class="mx-2 support-line-breaks">{{ answer.text }}</p>
             <hr>
         </div>
     </div>

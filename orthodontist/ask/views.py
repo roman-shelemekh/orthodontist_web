@@ -10,12 +10,9 @@ from django.db.models import Count
 from .models import Question, Answer
 from .forms import AskQuestionForm, ReplyForm, OrderByForm
 from rest_framework import generics
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.generics import UpdateAPIView
 from .serializers import QuestionSerializer, QuestionEditSerializer
-
+from .permissions import IsOwnerOrReadOnly
 
 
 class AskView(TemplateView):
@@ -112,8 +109,12 @@ def like_question(request, pk):
 
 
 class QuestionListAjax(generics.ListAPIView):
-    # TODO: check on is_ajax
     serializer_class = QuestionSerializer
+
+    def initial(self, request, *args, **kwargs):
+        if not request.is_ajax():
+            raise Http404()
+        return super(QuestionListAjax, self).initial(request, *args, **kwargs)
 
     def get_queryset(self):
         order_by = self.request.GET.get('order_by')
@@ -135,20 +136,12 @@ class QuestionListAjax(generics.ListAPIView):
         return context
 
 
-class QuestionEdit(APIView):
+class QuestionEdit(UpdateAPIView):
+    serializer_class = QuestionEditSerializer
+    queryset = Question.objects.all()
+    permission_classes = [IsOwnerOrReadOnly]
 
-    def get_object(self, pk):
-        try:
-            return Question.objects.get(pk=pk)
-        except Question.DoesNotExist:
-            raise Http404
-
-    def put(self, request, pk, format=None):
-        print(request.data)
-        print(pk)
-        question = self.get_object(pk)
-        serializer = QuestionEditSerializer(question, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def initial(self, request, *args, **kwargs):
+        if not request.is_ajax():
+            raise Http404()
+        return super(QuestionEdit, self).initial(request, *args, **kwargs)

@@ -8,7 +8,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 function getQuestionList(url) {
     const questionList = document.getElementById('question-list')
-    fetch(url).then(response => response.json()).then(json => {
+    fetch(url, {
+        method:'GET',
+        headers: {'X-Requested-With': 'XMLHttpRequest'}
+    }).then(response => response.json()).then(json => {
 
         // Questions List loading
         questionList.innerHTML = ''
@@ -30,7 +33,7 @@ function getQuestionList(url) {
                 '                            </div>\n' +
                 '                        </div>\n' +
                 '                        <h5 class="card-title">' + question.title + '</h5>\n' +
-                '                        <p class="card-text">' + question.text + '</p>\n' +
+                '                        <p class="card-text support-line-breaks">' + question.text + '</p>\n' +
                 '                        <a href="' + question.question_url + '" class="btn btn-primary">Перейти к вопросу</a>\n' +
                 '                        <button class="like-btn btn btn-sm btn-primary float-end" type="submit" data-url="' + question.like_url + '" data-qid="' + question.id + '"><i class="far fa-thumbs-up"></i> <span class="like_count">' + question.like_count + '</span></button>\n' +
                 '                    </div>\n' +

@@ -17,20 +17,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const titleInput = document.getElementById("title-input")
         const textInput = document.getElementById("text-input")
         var formData = new FormData()
-        formData.set('title', titleInput.value)
-        formData.set('text', textInput.value)
         titleInput.oninput = (e)=>{formData.set('title', e.target.value)}
         textInput.oninput = (e)=>{formData.set('text', e.target.value)}
         updateButton.addEventListener('click', (event)=>{
             fetch(url,{
-                method: 'PUT',
+                method: 'PATCH',
                 body: formData,
                 headers: {
-                    "X-CSRFToken": getCookie("csrftoken")
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             }).then(response => response.json()).then(json => {
                 editField.innerHTML = '<h5 class="card-title">' + json.title + '</h5>\n' +
-                                      '<p class="card-text">' + json.text + '</p>'
+                                      '<p class="card-text support-line-breaks">' + json.text + '</p>'
             }).catch(err => console.error(err))
             event.preventDefault()
         })

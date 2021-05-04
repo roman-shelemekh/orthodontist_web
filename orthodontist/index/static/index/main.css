@@ -43,5 +43,8 @@ body {
 
 img {
     max-width: 100%;
+}
 
+.support-line-breaks {
+    white-space: pre-wrap;
 }

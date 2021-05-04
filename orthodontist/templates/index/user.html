@@ -10,7 +10,7 @@
                     <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
                     <h6 class="card-subtitle mb-2 text-muted">Ответы: {{ question.answers_count }}</h6>
                     <h5 class="card-title"><a style="color: black; text-decoration: none;" href="{% url 'ask:question' question.id %}">{{ question.title }}</a></h5>
-                    <p class="card-text">{{ question.text }}</p>
+                    <p class="card-text support-line-breaks">{{ question.text }}</p>
                     <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %} float-end" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}"><i class="far fa-thumbs-up"></i> <span class="like_count">{{ question.like.count }}</span></button>
                 </div>
             </div>
