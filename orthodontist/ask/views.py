@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -10,7 +10,12 @@ from django.db.models import Count
 from .models import Question, Answer
 from .forms import AskQuestionForm, ReplyForm, OrderByForm
 from rest_framework import generics
-from .serializers import QuestionSerializer
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.generics import RetrieveUpdateAPIView
+from .serializers import QuestionSerializer, QuestionEditSerializer
+
 
 
 class AskView(TemplateView):
@@ -107,6 +112,7 @@ def like_question(request, pk):
 
 
 class QuestionListAjax(generics.ListAPIView):
+    # TODO: check on is_ajax
     serializer_class = QuestionSerializer
 
     def get_queryset(self):
@@ -127,3 +133,22 @@ class QuestionListAjax(generics.ListAPIView):
         context = super(QuestionListAjax, self).get_serializer_context()
         context['user'] = self.request.user
         return context
+
+
+class QuestionEdit(APIView):
+
+    def get_object(self, pk):
+        try:
+            return Question.objects.get(pk=pk)
+        except Question.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk, format=None):
+        print(request.data)
+        print(pk)
+        question = self.get_object(pk)
+        serializer = QuestionEditSerializer(question, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

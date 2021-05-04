@@ -16,6 +16,7 @@
                    <div class="clearfix">
                        {% if user.id == question.author.id %}
                        <a href="{% url 'ask:delete_question' question.id %}" class="float-end" style="color:gray"><i class="far fa-trash-alt"></i></a>
+                       <a href="#" data-url="{% url 'ask:edit_question' question.id %}" class="float-end me-2" style="color:gray" id="edit-button"><i class="far fa-edit"></i></a>
                        {% endif %}
                        <div class="user-pic-question float-start mb-3">
                            <img src="{{ question.author.profile.image.url }}" alt="{{ question.author.first_name }}">
@@ -25,8 +26,11 @@
                            <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date|date:"j E Y" }}</h6>
                        </div>
                     </div>
-                    <h5 class="card-title">{{ question.title }}</h5>
-                    <p class="card-text">{{ question.text }}</p>
+                    <div id="edit-field">
+                        <h5 class="card-title">{{ question.title }}</h5>
+                        <p class="card-text">{{ question.text }}</p>
+                    </div>
+
                     <button class="like-btn btn btn-sm btn-primary {% if user in question.like.all %}active{% endif %} float-end" type="submit" data-url="{% url 'ask:like' question.id %}" data-qid="{{question.id}}"><i class="far fa-thumbs-up"></i> <span class="like_count">{{ question.like.count }}</span></button>
                 </div>
             </div>

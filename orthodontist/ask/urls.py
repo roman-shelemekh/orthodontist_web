@@ -12,7 +12,6 @@ urlpatterns = [
     path('<int:pk>/delete_question/', views.delete_question, name='delete_question'),
     path('<int:pk>/delete_answer/', views.delete_answer, name='delete_answer'),
     path('<int:pk>/like/', views.like_question, name='like'),
-    path('ajax_sorting/', views.QuestionListAjax.as_view(), name='question_ajax')
+    path('ajax_sorting/', views.QuestionListAjax.as_view(), name='question_ajax'),
+    path('<int:pk>/edit_question/', views.QuestionEdit.as_view(), name='edit_question'),
 ]
-
-# urlpatterns += format_suffix_patterns([path('ajax_sorting/', views.QuestionListAjax.as_view(), name='question_ajax')])

@@ -40,3 +40,9 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_author_url(self, obj):
         return reverse('user', args=[obj.author.id])
+
+
+class QuestionEditSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ['title', 'text']

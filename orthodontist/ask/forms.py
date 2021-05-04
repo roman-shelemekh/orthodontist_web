@@ -50,3 +50,18 @@ ORDER_BY = [
 class OrderByForm(forms.Form):
     order_by = forms.ChoiceField(required=False, choices=ORDER_BY, label='Сортировать по',
                                  widget=forms.Select(attrs={'class': 'form-control'}))
+
+
+class QuestionEditForm(forms.ModelForm):
+
+    class Meta:
+        model = Question
+        fields = ['title', 'text']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Вопрос кратко'}),
+            'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Подробное изложение вопроса'}),
+        }
+        labels = {
+            'title': 'Заголовок',
+            'text': 'Вопрос'
+        }
