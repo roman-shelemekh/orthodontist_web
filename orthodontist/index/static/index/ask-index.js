@@ -8,10 +8,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 function getQuestionList(url) {
     const questionList = document.getElementById('question-list')
+    const spinner = document.getElementById('spinner')
+    spinner.removeAttribute('hidden')
     fetch(url, {
         method:'GET',
         headers: {'X-Requested-With': 'XMLHttpRequest'}
     }).then(response => response.json()).then(json => {
+        spinner.setAttribute('hidden', '')
 
         // Questions List loading
         questionList.innerHTML = ''
