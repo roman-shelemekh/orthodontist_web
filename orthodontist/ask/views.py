@@ -118,8 +118,14 @@ class QuestionListAjax(generics.ListAPIView):
 
     def get_queryset(self):
         order_by = self.request.GET.get('order_by')
-        queryset = Question.objects.all().annotate(answers_count=Count('answer__id'))\
-                                         .annotate(like_count=Count('like__id'))
+
+        queryset = Question.objects.all().extra(select={
+            'answers_count': 'select count(*) from ask_question q join ask_answer a on q.id = a.question_id '
+                             'where ask_question.id = q.id group by q.id',
+            'like_count': 'select count(*) from ask_question q join ask_question_like l on q.id = l.question_id '
+                          'where ask_question.id = q.id group by q.id'
+        })
+
         if not order_by or order_by == 'new':
             queryset = queryset.order_by('-date')
         elif order_by == 'old':

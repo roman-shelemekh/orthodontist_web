@@ -2,6 +2,11 @@ import { likeQuestion } from './main.js'
 
 document.addEventListener('DOMContentLoaded', ()=>{
     likeQuestion()
+    editQuestion()
+})
+
+
+function editQuestion() {
     const editButton = document.getElementById('edit-button')
     editButton.addEventListener('click', (event)=>{
         const url = editButton.dataset.url
@@ -34,7 +39,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
             event.preventDefault()
         })
     })
-})
+}
 
 
 function getCookie(name) {

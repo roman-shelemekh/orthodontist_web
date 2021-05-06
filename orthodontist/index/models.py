@@ -5,6 +5,7 @@ from django.core.cache import cache
 import datetime
 from orthodontist import settings
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='profile_pics/default.png', upload_to='profile_pics')
