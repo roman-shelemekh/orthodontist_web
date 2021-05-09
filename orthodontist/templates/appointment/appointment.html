@@ -16,7 +16,8 @@
         {% endfor %}
         {% endif %}
     </div>
-    <form>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
         <div class="row g-4 justify-content-center mb-3">
             <div class="col-lg-3">
                 <div class="form-floating">
@@ -32,8 +33,13 @@
             </div>
             <div class="col-lg-3">
                 <div class="form-floating">
-                  {{ form.phone_number}}
+                  {{ form.phone_number }}
                   <label for="id_phone_number">{{ form.phone_number.label}}</label>
+                  {% if form.phone_number.errors %}
+                  <div id="id_phone_number" class="invalid-feedback">
+                      {{ form.phone_number.errors }}
+                  </div>
+                  {% endif %}
                 </div>
             </div>
         </div>
@@ -42,18 +48,33 @@
                 <div class="form-floating" data-url="{% url 'appointment:get_clinics' %}">
                     {{ form.clinic }}
                     <label for="id_clinic">{{ form.clinic.label }}</label>
+                    {% if form.clinic.errors %}
+                    <div id="id_clinic" class="invalid-feedback">
+                        {{ form.clinic.errors }}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-floating" data-url="{% url 'appointment:get_dates' %}">
                     {{ form.date}}
                     <label for="id_date">{{ form.date.label }}</label>
+                    {% if form.date.errors %}
+                    <div id="id_date" class="invalid-feedback">
+                        {{ form.date.errors }}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-lg-2">
                 <div class="form-floating" data-url="{% url 'appointment:get_timetable' %}">
                     {{ form.time}}
                     <label for="id_time">{{ form.time.label }}</label>
+                    {% if form.time.errors %}
+                    <div id="id_time" class="invalid-feedback">
+                        {{ form.time.errors }}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -62,6 +83,11 @@
                 <div class="form-floating">
                     {{ form.description}}
                     <label for="id_description">{{ form.description.label }}</label>
+                    {% if form.description.errors %}
+                    <div id="id_description" class="invalid-feedback">
+                        {{ form.description.errors }}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -71,6 +97,9 @@
             </div>
         </div>
     </form>
+    {% for e in form.non_field_errors %}
+    <div class="alert alert-danger">{{ e }}</div>
+    {% endfor %}
 </main>
 {% endblock %}
 {% load static %}

@@ -1,22 +1,26 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 from django.utils import timezone
 from django.http import JsonResponse
 from .forms import AppointmentForm
 from .models import Clinic, Appointment
 
 
-class AppointmentView(TemplateView):
+class AppointmentView(FormView):
     template_name = 'appointment/appointment.html'
+    form_class = AppointmentForm
+    success_url = '/'
 
-    def dispatch(self, request, *args, **kwargs):
-        self.form = AppointmentForm()
-        return super(AppointmentView, self).dispatch(request, *args, **kwargs)
+    def form_valid(self, form):
+        form.cleaned_data['user'] = self.request.user
+        form.save()
+        return super(AppointmentView, self).form_valid(form)
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(AppointmentView, self).get_context_data(**kwargs)
-        context['form'] = self.form
-        return context
+    def form_invalid(self, form):
+        for field in form.errors:
+            form[field].field.widget.attrs['class'] += ' is-invalid'
+        return super(AppointmentView, self).form_invalid(form)
     
     
 def get_clinics(request):
