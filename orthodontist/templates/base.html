@@ -18,12 +18,12 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav align-items-lg-center">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">О враче</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="#">Результаты</a></li>
-                                <li><a class="dropdown-item" href="#">Клиники</a></li>
+                                <li><a class="dropdown-item" href="{% url 'appointment:index' %}">Запись на прием</a></li>
                                 <li><a class="dropdown-item" href="#">Контакты</a></li>
                             </ul>
                         </li>
@@ -33,6 +33,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'ask:ask_question' %}">Задать вопрос</a>
                         </li>
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link" href="#">Запись на прием</a>-->
+<!--                        </li>-->
                     </ul>
                     <ul class="navbar-nav ms-auto">
                         <form class="d-flex" action="{% url 'search' %}">

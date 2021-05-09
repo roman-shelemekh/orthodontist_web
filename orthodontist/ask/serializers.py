@@ -21,10 +21,10 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
                   'answers_count', 'like', 'like_count', 'like_url']
 
     def get_answers_count(self, obj):
-        try:
+        if obj.answers_count:
             return obj.answers_count
-        except:
-            return None
+        else:
+            return 0
 
     def get_like(self, obj):
         if self.context['user'] in obj.like.all():
@@ -33,7 +33,10 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
             return False
 
     def get_like_count(self,obj):
-        return obj.like_count
+        if obj.like_count:
+            return obj.like_count
+        else:
+            return 0
 
     def get_like_url(self, obj):
         return reverse('ask:like', args=[obj.id])

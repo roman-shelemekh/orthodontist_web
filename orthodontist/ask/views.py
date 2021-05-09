@@ -6,7 +6,6 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.decorators import method_decorator
-from django.db.models import Count
 from .models import Question, Answer
 from .forms import AskQuestionForm, ReplyForm, OrderByForm
 from rest_framework import generics
@@ -35,7 +34,6 @@ class QuestionDetail(DetailView):
     context_object_name = 'question'
 
     def dispatch(self, request, *args, **kwargs):
-        print(reverse('ask:question_ajax'))
         self.form = ReplyForm()
         return super(QuestionDetail, self).dispatch(request, *args, **kwargs)
 

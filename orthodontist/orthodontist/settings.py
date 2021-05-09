@@ -33,6 +33,7 @@ ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
 INSTALLED_APPS = [
     'index.apps.IndexConfig',
     'ask.apps.AskConfig',
+    'appointment.apps.AppointmentConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

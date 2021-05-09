@@ -9,7 +9,7 @@ admin.site.unregister(User)
 class ProfileInline(admin.StackedInline):
     model = Profile
     fields = ['user', 'image']
-    verbose_name = 'Фото профеля'
+    verbose_name = 'Фото профиля'
     verbose_name_plural = 'Фото'
     can_delete = False
 

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Запись на прием | {{ block.super }}{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-9 mb-3">
+            <h2>Запись на прием</h2>
+        </div>
+    </div>
+    <div>
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success" role="alert">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <form>
+        <div class="row g-4 justify-content-center mb-3">
+            <div class="col-lg-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="staticName" value="{{ user.first_name }}" disabled>
+                    <label for="staticName">Имя</label>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="staticEmail" value="{{ user.email }}" disabled>
+                    <label for="staticEmail">Электронная почта</label>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-floating">
+                  {{ form.phone_number}}
+                  <label for="id_phone_number">{{ form.phone_number.label}}</label>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4 justify-content-center mb-3">
+            <div class="col-lg-5">
+                <div class="form-floating" data-url="{% url 'appointment:get_clinics' %}">
+                    {{ form.clinic }}
+                    <label for="id_clinic">{{ form.clinic.label }}</label>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-floating" data-url="{% url 'appointment:get_dates' %}">
+                    {{ form.date}}
+                    <label for="id_date">{{ form.date.label }}</label>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-floating" data-url="{% url 'appointment:get_timetable' %}">
+                    {{ form.time}}
+                    <label for="id_time">{{ form.time.label }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-9">
+                <div class="form-floating">
+                    {{ form.description}}
+                    <label for="id_description">{{ form.description.label }}</label>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-9 d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">Записаться на прием</button>
+            </div>
+        </div>
+    </form>
+</main>
+{% endblock %}
+{% load static %}
+
+{% block script %}
+<script type="module" src="{% static 'appointment/appointment.js' %}"></script>
+{% endblock %}
