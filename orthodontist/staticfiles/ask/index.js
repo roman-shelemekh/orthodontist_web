@@ -1,4 +1,4 @@
-import { likeQuestion } from './main.js'
+import { likeQuestion } from '../main.js'
 
 document.addEventListener('DOMContentLoaded', ()=>{
     const url = document.getElementById('question-list').dataset.url

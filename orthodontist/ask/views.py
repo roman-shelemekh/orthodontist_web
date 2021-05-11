@@ -6,6 +6,7 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.decorators import method_decorator
+from django.db.models import Count
 from .models import Question, Answer
 from .forms import AskQuestionForm, ReplyForm, OrderByForm
 from rest_framework import generics
@@ -116,7 +117,9 @@ class QuestionListAjax(generics.ListAPIView):
 
     def get_queryset(self):
         order_by = self.request.GET.get('order_by')
-
+        # queryset = Question.objects.all()
+        # queryset = queryset.annotate(answers_count=Count('answer__id'))
+        # queryset = queryset.annotate(like_count=Count('like__id'))
         queryset = Question.objects.all().extra(select={
             'answers_count': 'select count(*) from ask_question q join ask_answer a on q.id = a.question_id '
                              'where ask_question.id = q.id group by q.id',
