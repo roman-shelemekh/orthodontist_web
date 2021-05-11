@@ -43,6 +43,7 @@
                 <a class="nav-link" href="{% url 'user' userdata.id %}">Последние вопросы</a>
                 <a class="nav-link" href="{% url 'user_popular' userdata.id %}">Популярные вопросы</a>
                 {% if user == userdata %}
+                <a class="nav-link" href="{% url 'appointments' userdata.id %}">Записи на прием</a>
                 <a class="nav-link" href="{% url 'update' userdata.id %}">Настройки</a>
                 {% endif %}
             </nav>

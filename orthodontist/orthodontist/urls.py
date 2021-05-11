@@ -31,6 +31,7 @@ urlpatterns = [
     path('user/<int:pk>/', views.UserView.as_view(), name='user'),
     path('user/<int:pk>/popular/', views.UserViewPopular.as_view(), name='user_popular'),
     path('user/<int:pk>/update/', views.UserViewUpdate.as_view(), name='update'),
+    path('user/<int:pk>/appointments/', views.UserViewAppointments.as_view(), name='appointments'),
     path('search/', views.SearchResults.as_view(), name='search'),
 
 ]

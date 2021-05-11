@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
 from django.db.models import Count, Q
+from django.utils import timezone
 from ask.models import Question
 from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm, SearchForm
 
@@ -119,6 +120,30 @@ class UserViewUpdate(DetailView):
             context['u_form'] = u_form
             context['p_form'] = p_form
             return render(request, 'index/user_update.html', context)
+
+
+class UserViewAppointments(DetailView):
+    model = User
+    template_name = 'index/user_appointments.html'
+    context_object_name = 'userdata'
+
+    def dispatch(self, request, *args, **kwargs):
+        if kwargs['pk'] != request.user.id:
+            return HttpResponseForbidden()
+        return super(UserViewAppointments, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(UserViewAppointments, self).get_context_data(**kwargs)
+        rating = 0
+        for question in self.object.question_set.all():
+            rating += question.like.count()
+        context['rating'] = rating
+        context['future_appointments'] = context['userdata']\
+            .patient.appointment_set.filter(date__gte=timezone.now().date()).order_by('date')
+        context['past_appointments'] = context['userdata']\
+            .patient.appointment_set.filter(date__lt=timezone.now().date()).order_by('-date')
+        return context
+
 
 
 class SearchResults(ListView):

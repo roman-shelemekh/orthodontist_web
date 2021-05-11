@@ -153,3 +153,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'ask.pagination.CustomPagination',
     'PAGE_SIZE': 10
 }
+
+EMAIL_HOST = 'smtp.yandex.com'
+EMAIL_HOST_USER = 'orthodental@tut.by'
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True

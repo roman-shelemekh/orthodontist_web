@@ -1,25 +1,33 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.shortcuts import reverse
 from django.views.generic.edit import FormView
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .forms import AppointmentForm
 from .models import Clinic, Appointment
 
-
+@method_decorator(login_required, name='dispatch')
 class AppointmentView(FormView):
     template_name = 'appointment/appointment.html'
     form_class = AppointmentForm
-    success_url = '/'
+    # success_url = reverse('appointments')
+
+    def get_success_url(self):
+        return reverse('appointments', args=[self.request.user.id])
 
     def form_valid(self, form):
         form.cleaned_data['user'] = self.request.user
         form.save()
+        form.send_email()
+        messages.success(self.request, 'Вы успешно записались на прием.')
         return super(AppointmentView, self).form_valid(form)
 
     def form_invalid(self, form):
-        for field in form.errors:
-            form[field].field.widget.attrs['class'] += ' is-invalid'
+        for field in form:
+            if field.errors:
+                field.field.widget.attrs['class'] += ' is-invalid'
         return super(AppointmentView, self).form_invalid(form)
     
     
