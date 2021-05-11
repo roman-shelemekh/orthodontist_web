@@ -10,7 +10,7 @@
                             <h6 class="card-title mb-3">Прием в клинике "{{ appointment.clinic }}"</h6>
                             <h6 class="card-subtitle mb-2 text-muted">Дата приема: {{ appointment.date }}</h6>
                             <h6 class="card-subtitle mb-2 text-muted">Время приема: {{ appointment.time }}</h6>
-                            <a href="#" class="btn btn-primary btn-sm">Отменить запись</a>
+                            <a href="{% url 'appointment:delete_appointment' appointment.id %}" class="btn btn-primary btn-sm">Отменить запись</a>
                         </div>
                     </div>
                     {% endfor %}

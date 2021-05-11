@@ -8,4 +8,5 @@ urlpatterns = [
     path('get_clinics/', views.get_clinics, name='get_clinics'),
     path('get_dates/', views.get_dates, name='get_dates'),
     path('get_timetable/', views.get_timetable, name='get_timetable'),
+    path('<int:pk>/delete_appointment/', views.delete_appointment, name='delete_appointment'),
 ]

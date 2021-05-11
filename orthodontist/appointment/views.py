@@ -1,10 +1,10 @@
-from django.shortcuts import reverse
+from django.shortcuts import reverse, get_object_or_404
 from django.views.generic.edit import FormView
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404, HttpResponseRedirect
 from .forms import AppointmentForm
 from .models import Clinic, Appointment
 
@@ -56,3 +56,14 @@ def get_timetable(request):
                                                   patient=None).order_by('time')
         data = {'timetable': list(appointments.values_list('time', flat=True))}
         return JsonResponse(data, status=200)
+
+def delete_appointment(request, pk):
+    appointment = get_object_or_404(Appointment, pk=pk)
+    if request.user == appointment.patient.user:
+        appointment.patient = None
+        appointment.problem = None
+        appointment.save()
+        messages.success(request, 'Вы успешно отменили запись на прием.')
+        return HttpResponseRedirect(reverse('appointments', args=[request.user.id]))
+    else:
+        raise Http404()
