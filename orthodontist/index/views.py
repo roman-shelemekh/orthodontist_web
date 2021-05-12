@@ -14,7 +14,6 @@ from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm, Sea
 def index(request):
     return render(request, 'index/index.html')
 
-
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -31,7 +30,6 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-
 def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -46,7 +44,18 @@ def login_view(request):
     return render(request, 'index/login.html', {'form': form})
 
 
-class UserView(SingleObjectMixin, ListView):
+class UserRatingMixin:
+
+    def get_context_data(self, **kwargs):
+        context = super(UserRatingMixin, self).get_context_data(**kwargs)
+        rating = 0
+        for question in self.object.question_set.all():
+            rating += question.like.count()
+        context['rating'] = rating
+        return context
+
+
+class UserView(UserRatingMixin, SingleObjectMixin, ListView):
     template_name = 'index/user.html'
     paginate_by = 5
     context_object_name = 'userdata'
@@ -55,33 +64,20 @@ class UserView(SingleObjectMixin, ListView):
         self.object = self.get_object(queryset=User.objects.all())
         return super().get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        rating = 0
-        for question in self.object.question_set.all():
-            rating += question.like.count()
-        context['rating'] = rating
-        return context
-
     def get_queryset(self):
-        queryset = self.object.question_set.all()
-        queryset = queryset.order_by('-date')
-        queryset = queryset.annotate(answers_count=Count('answer__id'))
-        return queryset
+        queryset = Question.objects.annotated()
+        return queryset.order_by('-date')
 
 
 class UserViewPopular(UserView):
     template_name = 'index/user_popular.html'
 
     def get_queryset(self):
-        queryset = self.object.question_set.all()
-        queryset = queryset.annotate(like_count=Count('like__id'))
-        queryset = queryset.order_by('-like_count')
-        queryset = queryset.annotate(answers_count=Count('answer__id'))
-        return queryset
+        queryset = super(UserViewPopular, self).get_queryset()
+        return queryset.order_by('-like_count')
 
 
-class UserViewUpdate(DetailView):
+class UserViewUpdate(UserRatingMixin, DetailView):
     model = User
     template_name = 'index/user_update.html'
     context_object_name = 'userdata'
@@ -95,10 +91,6 @@ class UserViewUpdate(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserViewUpdate, self).get_context_data(**kwargs)
-        rating = 0
-        for question in self.object.question_set.all():
-            rating += question.like.count()
-        context['rating'] = rating
         context['u_form'] = self.u_form
         context['p_form'] = self.p_form
         return context
@@ -122,7 +114,7 @@ class UserViewUpdate(DetailView):
             return render(request, 'index/user_update.html', context)
 
 
-class UserViewAppointments(DetailView):
+class UserViewAppointments(UserRatingMixin, DetailView):
     model = User
     template_name = 'index/user_appointments.html'
     context_object_name = 'userdata'
@@ -134,10 +126,6 @@ class UserViewAppointments(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserViewAppointments, self).get_context_data(**kwargs)
-        rating = 0
-        for question in self.object.question_set.all():
-            rating += question.like.count()
-        context['rating'] = rating
         context['future_appointments'] = context['userdata']\
             .patient.appointment_set.filter(date__gte=timezone.now().date()).order_by('date')
         context['past_appointments'] = context['userdata']\
@@ -170,7 +158,6 @@ class SearchResults(ListView):
         elif self.form.cleaned_data.get('search_by') == "question_author":
             filter = '|'.join(self.form.cleaned_data.get('search_input').split())
             queryset = queryset.filter(Q(author__first_name__iregex=filter) | Q(author__last_name__iregex=filter))
-            # queryset = queryset.filter(author__username=self.form.cleaned_data.get('search_input'))
         if not self.form.cleaned_data.get('order_by') or self.form.cleaned_data.get('order_by') == "new":
             queryset = queryset.order_by('-date')
         elif self.form.cleaned_data.get('order_by') == "old":
