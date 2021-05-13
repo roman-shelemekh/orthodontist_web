@@ -2,32 +2,113 @@
 
 {% block title %}Главная | {{ block.super }}{% endblock %}
 
+{% load static %}
+
 {% block content %}
 <style>
 @media (min-width: 62em) {
   .featurette-heading {
-    margin-top: 7rem;
+    margin-top: 8rem;
   }
 }
+.text-start{
+    min-height: 12rem;
+}
+.marketing .col-lg-4 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+.marketing h2 {
+  font-weight: 400;
+}
+.marketing .col-lg-4 p {
+  margin-right: .75rem;
+  margin-left: .75rem;
+}
 </style>
+
 <main class="container">
     <div class="row featurette">
-        <div class="col-md-7 align-items-center">
-            <h2 class="featurette-heading">Стоматолог-ортодонт Екатерина Бахур <span class="text-muted">It’ll blow your mind.</span></h2>
-            <p class="lead">Оказание профессиональных ортодонтических услуг любой сложности с применением самых совеременных практик.</p>
-        </div>
         <div class="col-md-5">
-            <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
+            <img src="{% static 'profile.png' %}" alt="">
+        </div>
+        <div class="col-md-7">
+            <h1 class="featurette-heading">Екатерина Бахур</h1>
+            <h2 class="text-muted">стоматолог-ортодонт</h2>
+            <p class="lead">Оказание профессиональных ортодонтических услуг любой сложности с применением самых совеременных практик.</p>
+            <button type="button" class="btn btn-outline-primary btn-lg">О враче</button>
         </div>
     </div>
+    <div class="container marketing mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-4">
+                <img class="rounded-circle" width="140" height="140" src="{% static '3.png' %}" alt="">
+                <h2>Опыт других пациентов</h2>
+                <p>На сайте собран опыт десятков пациентов, успешно завершивших свое лечение. Среди их вопросов может найтись решение Вашей проблемы</p>
+                <p><a class="btn btn-outline-primary" href="#">Все вопросы</a></p>
+            </div>
+            <div class="col-lg-4">
+                <img class="rounded-circle" width="140" height="140" src="{% static '2.png' %}" alt="">
+                <h2>Задайте<br>свой вопрос</h2>
+                <p>Вы можете оставить свой вопрос, на который обязательно ответит Екатерина или другие высококвалифицированные ортодонты</p>
+                <p><a class="btn btn-outline-primary" href="#">Задать вопрос</a></p>
+            </div>
+            <div class="col-lg-4">
+                <img class="rounded-circle" width="140" height="140" src="{% static '1.png' %}" alt="">
 
-
-
-
-    <div class="bg-light p-5 rounded">
-        <h1>Стоматолог-ортодонт Екатерина Бахур</h1>
-        <p class="lead">This example is a quick exercise to illustrate how fixed to top navbar works. As you scroll, it will remain fixed to the top of your browser’s viewport.</p>
-        <a class="btn btn-lg btn-primary" href="#" role="button">О враче</a>
+                <h2>Запишитесь<br>на прием</h2>
+                <p>Если Вы уже изучили много информации в интернете, но до сих пор не знаете, куда двигаться, запишитесь на бесплатную консультацию</p>
+                <p><a class="btn btn-outline-primary" href="#">Записаться</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center my-5">
+        <div>
+            <h3>Отзывы пациентов</h3>
+        </div>
+        <div id="myCarousel" class="carousel carousel-dark slide p-3" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="text-start d-flex align-items-center">
+                        <blockquote class="blockquote mx-5">
+                            <p class="font-italic lead"> <i class="fa fa-quote-left mr-3 me-3 text-secondary"></i><em> Если вы ищете профессионала, которому не равнодушен результат его работы и мнение пациента,
+                            Екатерина та, кто вам нужен! Врач очень трепетно относится к своей работе, к своим пациентам
+                            и является мастером своего дела!</em></p>
+                            <footer class="blockquote-footer mt-2">Роман Шелемех, 20 декабря 2020 года
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="text-start d-flex align-items-center">
+                        <blockquote class="blockquote mx-5">
+                            <p class="font-italic lead"> <i class="fa fa-quote-left mr-3 me-3 text-secondary"></i><em> Если вы ищете профессионала, которому не равнодушен результат его работы и мнение пациента,
+                            Екатерина та, кто вам нужен! Врач очень трепетно относится к своей работе, к своим пациентам
+                            и является мастером своего дела! Если вы ищете профессионала, которому не равнодушен результат его работы и мнение пациента,
+                            Екатерина та, кто вам нужен! Врач очень трепетно относится к своей работе, к своим пациентам
+                            и является мастером своего дела!</em></p>
+                            <footer class="blockquote-footer mt-2">Роман Шелемех, 20 декабря 2020 года
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="text-start d-flex align-items-center">
+                        <blockquote class="blockquote mx-5">
+                            <p class="font-italic lead"> <i class="fa fa-quote-left mr-3 me-3 text-secondary"></i><em> Если вы ищете профессионала, которому не равнодушен результат его работы и мнение пациента,
+                            Екатерина та, кто вам нужен! Врач очень трепетно относится к своей работе, к своим пациентам
+                            и является мастером своего дела!</em></p>
+                            <footer class="blockquote-footer mt-2">Роман Шелемех, 20 декабря 2020 года</footer>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 {% endblock %}
