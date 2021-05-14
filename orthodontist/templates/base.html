@@ -45,7 +45,7 @@
                             Привет, {{ user.first_name }}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'user' user.id %}">Профиль <i class="fas fa-user-circle"></i></a></li>
+                                <li><a class="dropdown-item" href="{% url 'user' user.id %}">Кабинет <i class="fas fa-user-circle"></i></a></li>
                                 <li><a class="dropdown-item" href="#">Мои вопросы</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти <i class="fas fa-sign-out-alt"></i></a></li>

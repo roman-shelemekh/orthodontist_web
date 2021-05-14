@@ -9,19 +9,47 @@
             <h2>Запись на прием</h2>
         </div>
     </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-9 mb-3">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success" role="alert">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% block user_questions %}{% endblock %}
+        </div>
+    </div>
     <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
         <div class="row g-4 justify-content-center mb-3">
             <div class="col-lg-3">
                 <div class="form-floating">
-                    <input type="text" class="form-control" id="staticName" value="{{ user.first_name }}" disabled>
-                    <label for="staticName">Имя</label>
+                    {% if user.is_authenticated %}
+                    <input type="text" class="form-control" id="id_name" value="{{ user.first_name }}" disabled>
+                    {% else %}
+                    {{ form.name }}
+                    {% endif %}
+                    <label for="id_name">Имя</label>
+                    {% if form.name.errors %}
+                    <div id="id_name" class="invalid-feedback">
+                        {{ form.name.errors }}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-lg-3">
                 <div class="form-floating">
+                    {% if user.is_authenticated %}
                     <input type="text" class="form-control" id="staticEmail" value="{{ user.email }}" disabled>
+                    {% else %}
+                    {{ form.email }}
+                    {% endif %}
                     <label for="staticEmail">Электронная почта</label>
+                    {% if form.email.errors %}
+                    <div id="id_email" class="invalid-feedback">
+                        {{ form.email.errors }}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="col-lg-3">
@@ -92,13 +120,21 @@
         <div class="row justify-content-center text-center">
             <div class="col-lg-9">
                 <div class="mb-2"><small class="text-muted">Все поля данной формы обязытельны для заполнения.</small></div>
+                {% if user.is_authenticated %}
                 <div class="mb-2"><small class="text-muted">Поля "Имя" и "Электронная почта" можно изменить в настройках профиля.</small></div>
+                {% endif %}
             </div>
         </div>
     </form>
     {% for e in form.non_field_errors %}
     <div class="alert alert-danger">{{ e }}</div>
     {% endfor %}
+
+    {% for field in form %}
+            {% if field.errors %}
+            <dev style="color: red;">{{ field.errors }}</dev>
+            {% endif %}
+            {% endfor %}
 </main>
 {% endblock %}
 {% load static %}

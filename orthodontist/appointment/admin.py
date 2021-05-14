@@ -74,11 +74,6 @@ class AppointmentAdmin(admin.ModelAdmin):
         return obj
     title.short_description = 'Запись'
 
-    # def if_empty(self, obj):
-    #     if not obj.patient and obj.date > timezone.now().date():
-    #         self.empty_value_display = '- свободно -'
-    #     else:
-    #         self.empty_value_display = '- просрочено -'
 
 
 class ClinicAdmin(admin.ModelAdmin):
@@ -86,15 +81,15 @@ class ClinicAdmin(admin.ModelAdmin):
 
 
 class PatientAdmin(admin.ModelAdmin):
-    list_display = ('patient_name', 'phone_number', 'email')
+    list_display = ('name', 'phone_number', 'email')
 
-    def patient_name(self, obj):
-        return obj.user.first_name + ' ' + obj.user.last_name
-    patient_name.short_description = 'Пациент'
-
-    def email(self, obj):
-        return obj.user.email
-    email.short_description = 'Электронный адрес'
+    # def patient_name(self, obj):
+    #     return obj.user.first_name + ' ' + obj.user.last_name
+    # patient_name.short_description = 'Пациент'
+    #
+    # def email(self, obj):
+    #     return obj.user.email
+    # email.short_description = 'Электронный адрес'
 
 
 admin.site.register(Appointment, AppointmentAdmin)

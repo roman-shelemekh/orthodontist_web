@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'index.apps.IndexConfig',
     'ask.apps.AskConfig',
     'appointment.apps.AppointmentConfig',
+    'feedback.apps.FeedbackConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

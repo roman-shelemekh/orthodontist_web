@@ -8,20 +8,34 @@ from django.http import JsonResponse, Http404, HttpResponseRedirect
 from .forms import AppointmentForm
 from .models import Clinic, Appointment
 
-@method_decorator(login_required, name='dispatch')
+# @method_decorator(login_required, name='dispatch')
 class AppointmentView(FormView):
     template_name = 'appointment/appointment.html'
     form_class = AppointmentForm
-    # success_url = reverse('appointments')
+
+    def get_form_kwargs(self):
+        kwargs = super(AppointmentView, self).get_form_kwargs()
+        if self.request.method == 'POST' and self.request.user.is_authenticated:
+            kwargs['data']._mutable = True
+            kwargs['data']['name'] = [self.request.user.first_name]
+            kwargs['data']['email'] = [self.request.user.email]
+            kwargs['data']._mutable = False
+        return kwargs
 
     def get_success_url(self):
-        return reverse('appointments', args=[self.request.user.id])
+        if self.request.user.is_authenticated:
+            return reverse('appointments', args=[self.request.user.id])
+        else:
+            return reverse('appointment:index')
 
     def form_valid(self, form):
-        form.cleaned_data['user'] = self.request.user
+        if self.request.user.is_authenticated:
+            form.cleaned_data['name'] = self.request.user.first_name
+            form.cleaned_data['email'] = self.request.user.email
         form.save()
         form.send_email()
-        messages.success(self.request, 'Вы успешно записались на прием.')
+        messages.success(self.request, 'Вы успешно записались на прием. '
+                                       'Сообщение с информацией о приеме отправлено на вашу почту')
         return super(AppointmentView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -59,7 +73,7 @@ def get_timetable(request):
 
 def delete_appointment(request, pk):
     appointment = get_object_or_404(Appointment, pk=pk)
-    if request.user == appointment.patient.user:
+    if request.user.email == appointment.patient.email:
         appointment.patient = None
         appointment.problem = None
         appointment.save()

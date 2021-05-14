@@ -8,6 +8,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.db.models import Count, Q
 from django.utils import timezone
 from ask.models import Question
+from appointment.models import Appointment
 from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm, SearchForm
 
 
@@ -126,10 +127,9 @@ class UserViewAppointments(UserRatingMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserViewAppointments, self).get_context_data(**kwargs)
-        context['future_appointments'] = context['userdata']\
-            .patient.appointment_set.filter(date__gte=timezone.now().date()).order_by('date')
-        context['past_appointments'] = context['userdata']\
-            .patient.appointment_set.filter(date__lt=timezone.now().date()).order_by('-date')
+        appointments = Appointment.objects.filter(patient__email=self.request.user.email)
+        context['future_appointments'] = appointments.filter(date__gte=timezone.now().date()).order_by('date')
+        context['past_appointments'] = appointments.filter(date__lt=timezone.now().date()).order_by('-date')
         return context
 
 
