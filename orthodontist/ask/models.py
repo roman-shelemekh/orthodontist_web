@@ -29,7 +29,7 @@ class Question(models.Model):
 
     class Meta:
         verbose_name = 'вопрос'
-        verbose_name_plural = 'Вопросы'
+        verbose_name_plural = 'вопросы'
 
 
 class Answer(models.Model):
@@ -43,4 +43,4 @@ class Answer(models.Model):
 
     class Meta:
         verbose_name = 'ответ'
-        verbose_name_plural = 'Ответы'
+        verbose_name_plural = 'ответы'

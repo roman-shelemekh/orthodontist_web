@@ -17,7 +17,6 @@ class Clinic(models.Model):
 class Patient(models.Model):
     name = models.CharField(max_length=40, verbose_name='Имя')
     email = models.EmailField(max_length=40, verbose_name='Электронная почта', unique=True)
-    # user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пациент')
     phone_number = models.CharField(max_length=20, verbose_name='Номер телефона')
 
     def __str__(self):
@@ -50,5 +49,5 @@ class Appointment(models.Model):
     class Meta:
         unique_together = ('date', 'time')
         verbose_name = 'запись на прием'
-        verbose_name_plural = 'Записи на прием'
+        verbose_name_plural = 'записи на прием'
         ordering = ['-date', '-time', 'clinic']

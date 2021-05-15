@@ -1,14 +1,12 @@
 from django.shortcuts import reverse, get_object_or_404
 from django.views.generic.edit import FormView
 from django.utils import timezone
-from django.utils.decorators import method_decorator
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, Http404, HttpResponseRedirect
 from .forms import AppointmentForm
 from .models import Clinic, Appointment
 
-# @method_decorator(login_required, name='dispatch')
+
 class AppointmentView(FormView):
     template_name = 'appointment/appointment.html'
     form_class = AppointmentForm
@@ -17,8 +15,8 @@ class AppointmentView(FormView):
         kwargs = super(AppointmentView, self).get_form_kwargs()
         if self.request.method == 'POST' and self.request.user.is_authenticated:
             kwargs['data']._mutable = True
-            kwargs['data']['name'] = [self.request.user.first_name]
-            kwargs['data']['email'] = [self.request.user.email]
+            kwargs['data']['name'] = self.request.user.first_name
+            kwargs['data']['email'] = self.request.user.email
             kwargs['data']._mutable = False
         return kwargs
 
@@ -29,9 +27,6 @@ class AppointmentView(FormView):
             return reverse('appointment:index')
 
     def form_valid(self, form):
-        if self.request.user.is_authenticated:
-            form.cleaned_data['name'] = self.request.user.first_name
-            form.cleaned_data['email'] = self.request.user.email
         form.save()
         form.send_email()
         messages.success(self.request, 'Вы успешно записались на прием. '
@@ -57,8 +52,8 @@ def get_dates(request):
         clinic = request.GET.get('clinic')
         appointments = Appointment.objects.filter(clinic__name=clinic,
                                                   date__gt=timezone.now().date(),
-                                                  patient=None).order_by('date')
-        data = {'dates': list(set(appointments.values_list('date', flat=True)))}
+                                                  patient=None).order_by('date').distinct('date')
+        data = {'dates': list(appointments.values_list('date', flat=True))}
         return JsonResponse(data, status=200)
 
 def get_timetable(request):

@@ -6,7 +6,6 @@ from django.views.generic.edit import FormView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.decorators import method_decorator
-from django.db.models import Count
 from .models import Question, Answer
 from .forms import AskQuestionForm, ReplyForm, OrderByForm
 from rest_framework import generics
@@ -41,7 +40,7 @@ class QuestionDetail(DetailView):
     def post(self, request, **kwargs):
         form = ReplyForm(request.POST)
         if form.is_valid():
-            form.cleaned_data['question'] = Question.objects.get(id=kwargs['pk'])
+            form.cleaned_data['question'] = self.get_object()
             form.cleaned_data['author'] = request.user
             print(form.cleaned_data)
             form.save()
@@ -57,7 +56,9 @@ class QuestionDetail(DetailView):
 class AskQuestionView(FormView):
     template_name = 'ask/ask_question.html'
     form_class = AskQuestionForm
-    success_url = '/question/'
+
+    def get_success_url(self):
+        return reverse('ask:index')
 
     def form_valid(self, form):
         form.cleaned_data['author'] = self.request.user

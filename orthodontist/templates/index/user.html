@@ -7,7 +7,7 @@
             {% for question in page_obj %}
             <div class="card mb-2">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date }}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Дата: {{ question.date|date:'j E o' }}</h6>
                     <h6 class="card-subtitle mb-2 text-muted">Ответы: {{ question.answers_count }}</h6>
                     <h5 class="card-title"><a style="color: black; text-decoration: none;" href="{% url 'ask:question' question.id %}">{{ question.title }}</a></h5>
                     <p class="card-text support-line-breaks">{{ question.text }}</p>

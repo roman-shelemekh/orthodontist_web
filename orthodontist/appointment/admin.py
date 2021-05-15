@@ -70,7 +70,6 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_filter = [AvailabilityFilter, 'clinic', ('date', MyDateFilter)]
 
     def title(self, obj):
-        # self.if_empty(obj)
         return obj
     title.short_description = 'Запись'
 
@@ -82,14 +81,6 @@ class ClinicAdmin(admin.ModelAdmin):
 
 class PatientAdmin(admin.ModelAdmin):
     list_display = ('name', 'phone_number', 'email')
-
-    # def patient_name(self, obj):
-    #     return obj.user.first_name + ' ' + obj.user.last_name
-    # patient_name.short_description = 'Пациент'
-    #
-    # def email(self, obj):
-    #     return obj.user.email
-    # email.short_description = 'Электронный адрес'
 
 
 admin.site.register(Appointment, AppointmentAdmin)

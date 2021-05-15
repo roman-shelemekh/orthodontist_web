@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Запись на прием | {{ block.super }}{% endblock %}
+
+{% block content %}
+<main class="container">
+
+    <div class="row justify-content-center">
+        <div class="col-lg-9 mb-3">
+            <h2>Оставьте отзыв</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-9 mb-3">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success" role="alert">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% block user_questions %}{% endblock %}
+        </div>
+    </div>
+    <form method="post" class="needs-validation mb-3" novalidate>
+        {% csrf_token %}
+        <div class="row g-4 justify-content-center mb-3">
+            <div class="col-lg-4">
+                <div class="form-floating">
+                    {% if user.is_authenticated %}
+                    <input type="text" class="form-control" id="id_name" value="{{ user.first_name }}" disabled>
+                    {% else %}
+                    {{ form.name }}
+                    {% endif %}
+                    <label for="id_name">Имя</label>
+                    {% if form.name.errors %}
+                    <div id="id_name" class="invalid-feedback">
+                        {{ form.name.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="form-floating">
+                    {% if user.is_authenticated %}
+                    <input type="text" class="form-control" id="staticEmail" value="{{ user.email }}" disabled>
+                    {% else %}
+                    {{ form.email }}
+                    {% endif %}
+                    <label for="staticEmail">Электронная почта</label>
+                    {% if form.email.errors %}
+                    <div id="id_email" class="invalid-feedback">
+                        {{ form.email.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-9">
+                <div class="form-floating">
+                    {{ form.comment}}
+                    <label for="id_comment">{{ form.comment.label }}</label>
+                    {% if form.comment.errors %}
+                    <div id="id_comment" class="invalid-feedback">
+                        {{ form.comment.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="appointment" value="{{ request.GET.appointment }}">
+        <div class="row justify-content-center mb-2">
+            <div class="col-lg-9 d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">Отправить отзыв</button>
+            </div>
+        </div>
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-9">
+                <div class="mb-2"><small class="text-muted">Все поля данной формы обязытельны для заполнения.</small></div>
+                {% if user.is_authenticated %}
+                <div class="mb-2"><small class="text-muted">Поля "Имя" и "Электронная почта" можно изменить в настройках профиля.</small></div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+    {% for e in form.non_field_errors %}
+    <div class="alert alert-danger">{{ e }}</div>
+    {% endfor %}
+    <div class="row justify-content-center">
+        <div class="col-lg-9 mb-3">
+            <h2>Отзывы пациентов</h2>
+        </div>
+    </div>
+
+    {% if feedbacks %}
+    {% for feedback in feedbacks %}
+    <div class="row justify-content-center">
+        <div class="col-lg-9 mb-3">
+
+            <div class="text-start d-flex align-items-center">
+                <blockquote class="blockquote">
+                    <p class="font-italic lead"> <i class="fa fa-quote-left mr-3 me-3 text-secondary"></i>
+                        <em>{{ feedback.comment }}</em>
+                    </p>
+                    <footer class="blockquote-footer mt-2">{{ feedback.name }}, {{ feedback.date|date:'j E o' }}</footer>
+                </blockquote>
+            </div>
+            <hr>
+        </div>
+    </div>
+    {% endfor %}
+    {% if page_obj.paginator.num_pages > 1 %}
+    <nav>
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page=1">Первая</a>
+            </li>
+            {% if page_obj.number|add:'-2' > 0 %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page={{ page_obj.number|add:'-2' }}">{{ page_obj.number|add:'-2' }}</a>
+            </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link text-primary" href="#" disabled>Первая</a>
+            </li>
+            {% endif %}
+            <li class="page-item active">
+                <span class="page-link bg-primary">{{ page_obj.number }}</span>
+            </li>
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+            </li>
+            {% if page_obj.number|add:'2' <= page_obj.paginator.num_pages %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page={{ page_obj.number|add:'2' }}">{{ page_obj.number|add:'2' }}</a>
+            </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link text-primary" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link text-primary" href="#">Последняя</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+    {% else %}
+    <div class="row justify-content-center">
+        <div class="col-lg-9 mb-3">
+            <p>Пока здесь нет отзывов.</p>
+        </div>
+    </div>
+    {% endif %}
+</main>
+{% endblock %}
