@@ -20,33 +20,33 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav align-items-lg-center">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">О враче</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Результаты</a></li>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">Врач</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                                <li><a class="dropdown-item" href="#">О враче</a></li>
                                 <li><a class="dropdown-item" href="{% url 'appointment:index' %}">Запись на прием</a></li>
                                 <li><a class="dropdown-item" href="{% url 'feedback:index' %}">Отзывы пациентов</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'ask:index' %}">Все вопроcы</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'ask:ask_question' %}">Задать вопрос</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">Вопросы</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+                                <li><a class="dropdown-item" href="{% url 'ask:index' %}">Все вопроcы</a></li>
+                                <li><a class="dropdown-item" href="{% url 'ask:ask_question' %}">Задать вопрос</a></li>
+                            </ul>
                         </li>
                     </ul>
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
                         <form class="d-flex" action="{% url 'search' %}">
                             {{ searchform.search_input }}
                             <button class="btn btn-outline-primary" type="submit">Поиск</button>
                         </form>
                         {% if user.is_authenticated %}
                         <li class="nav-item dropdown me-2">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Привет, {{ user.first_name }}
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
                                 <li><a class="dropdown-item" href="{% url 'user' user.id %}">Кабинет <i class="fas fa-user-circle"></i></a></li>
-                                <li><a class="dropdown-item" href="#">Мои вопросы</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти <i class="fas fa-sign-out-alt"></i></a></li>
                             </ul>
@@ -65,6 +65,37 @@
         </nav>
     </header>
     {% block content %}{% endblock %}
+    <footer class="text-center text-lg-start bg-light text-muted mt-5">
+        <section class="p-2">
+            <div class="container text-center text-md-start mt-3">
+                <div class="row mt-3">
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                      <!-- Content -->
+                      <h6 class="text-uppercase fw-bold mb-4">Спроси у ортодонта</h6>
+                      <p>Сайт стоматолога-ортодонта Екатеры Бахур</p>
+                    </div>
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <p><a href="{% url 'ask:index' %}" class="text-reset">Все вопросы</a></p>
+                        <p><a href="{% url 'ask:ask_question' %}" class="text-reset">Задать вопрос</a></p>
+                        <p><a href="{% url 'appointment:index' %}" class="text-reset">Записаться на прием</a></p>
+                    </div>
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <p><a href="{% if user.id %}{% url 'user' user.id %}{% else %}{% url 'login' %}{% endif %}" class="text-reset">Личный кабинет</a></p>
+                        <p><a href="{% url 'feedback:index' %}" class="text-reset">Оставить отзыв</a></p>
+
+                        <p><a href="{% if user.id %}{% url 'appointments' user.id %}{% else %}{% url 'login' %}{% endif %}" class="text-reset">Управлять записями</a></p>
+
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <p><a href="mailto:orthodental@tut.by" class="text-reset text-decoration-none"><i class="fas fa-envelope me-3"></i>orthodental@tut.by</a></p>
+                        <p><i class="fas fa-phone me-3"></i></i>+70123456789</p>
+                        <p><a href="#" class="text-reset text-decoration-none"><i class="fab fa-telegram me-3"></i></i>@YourOrthodontistBot</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">© 2021 Copyright: Роман Шелемех</div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     {% block script %}{% endblock %}
 </body>

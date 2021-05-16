@@ -50,7 +50,7 @@
             <div class="col-lg-4">
                 <img class="rounded-circle" width="140" height="140" src="{% static '2.png' %}" alt="">
                 <h2>Личный<br>кабинет</h2>
-                <p>Создайте свой личный кабинет, через который Вы сможете легко управлять своими записями, задавать вопросы и оставлять отзывы</p>
+                <p>Создайте личный кабинет, через который Вы сможете легко управлять своими записями, задавать вопросы специалистам и оставлять отзывы</p>
                 <p><a class="btn btn-outline-primary" href="#">Зарегистрироваться</a></p>
             </div>
             <div class="col-lg-4">
@@ -64,7 +64,7 @@
     </div>
     <div class="row justify-content-center my-5">
         <div>
-            <h3>Отзывы пациентов</h3>
+            <h3><a style="color: black; text-decoration: none;" href="{% url 'feedback:index' %}">Отзывы пациентов</a></h3>
         </div>
         <div id="myCarousel" class="carousel carousel-dark slide p-3" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -76,10 +76,10 @@
                 <div class="carousel-item active">
                     <div class="text-start d-flex align-items-center">
                         <blockquote class="blockquote mx-5">
-                            <p class="font-italic lead"> <i class="fa fa-quote-left mr-3 me-3 text-secondary"></i><em> Если вы ищете профессионала, которому не равнодушен результат его работы и мнение пациента,
-                            Екатерина та, кто вам нужен! Врач очень трепетно относится к своей работе, к своим пациентам
-                            и является мастером своего дела!</em></p>
-                            <footer class="blockquote-footer mt-2">Роман Шелемех, 20 декабря 2020 года
+                            <p class="font-italic lead"> <i class="fa fa-quote-left mr-3 me-3 text-secondary"></i>
+                                <em><a style="text-decoration: none;" class="text-dark" href="{% url 'feedback:index' %}">{{ feedback1.comment|truncatechars:380 }}</a></em>
+                            </p>
+                            <footer class="blockquote-footer mt-2">{{ feedback1.name }}, {{ feedback1.date|date:'j E o' }}
                             </footer>
                         </blockquote>
                     </div>
@@ -87,12 +87,10 @@
                 <div class="carousel-item">
                     <div class="text-start d-flex align-items-center">
                         <blockquote class="blockquote mx-5">
-                            <p class="font-italic lead"> <i class="fa fa-quote-left mr-3 me-3 text-secondary"></i><em> Если вы ищете профессионала, которому не равнодушен результат его работы и мнение пациента,
-                            Екатерина та, кто вам нужен! Врач очень трепетно относится к своей работе, к своим пациентам
-                            и является мастером своего дела! Если вы ищете профессионала, которому не равнодушен результат его работы и мнение пациента,
-                            Екатерина та, кто вам нужен! Врач очень трепетно относится к своей работе, к своим пациентам
-                            и является мастером своего дела!</em></p>
-                            <footer class="blockquote-footer mt-2">Роман Шелемех, 20 декабря 2020 года
+                            <p class="font-italic lead"> <i class="fa fa-quote-left mr-3 me-3 text-secondary"></i>
+                                <em><a style="text-decoration: none;" class="text-dark" href="{% url 'feedback:index' %}">{{ feedback2.comment|truncatechars:380 }}</a></em>
+                            </p>
+                            <footer class="blockquote-footer mt-2">{{ feedback2.name }}, {{ feedback2.date|date:'j E o' }}
                             </footer>
                         </blockquote>
                     </div>
@@ -100,15 +98,99 @@
                 <div class="carousel-item">
                     <div class="text-start d-flex align-items-center">
                         <blockquote class="blockquote mx-5">
-                            <p class="font-italic lead"> <i class="fa fa-quote-left mr-3 me-3 text-secondary"></i><em> Если вы ищете профессионала, которому не равнодушен результат его работы и мнение пациента,
-                            Екатерина та, кто вам нужен! Врач очень трепетно относится к своей работе, к своим пациентам
-                            и является мастером своего дела!</em></p>
-                            <footer class="blockquote-footer mt-2">Роман Шелемех, 20 декабря 2020 года</footer>
+                            <p class="font-italic lead"> <i class="fa fa-quote-left mr-3 me-3 text-secondary"></i>
+                                <em><a style="text-decoration: none;" class="text-dark" href="{% url 'feedback:index' %}">{{ feedback3.comment|truncatechars:380 }}</a></em>
+                            </p>
+                            <footer class="blockquote-footer mt-2">{{ feedback3.name }}, {{ feedback3.date|date:'j E o' }}
+                            </footer>
                         </blockquote>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="mb-4">
+            <h3 id="make-appointment"><a style="color: black; text-decoration: none;" href="{% url 'appointment:index' %}">Запись на прием</a></h3>
+        </div>
+        <div class="col-lg-7">
+            <form method="post" class="needs-validation" action="{% url 'appointment:index' %}" novalidate>
+                {% csrf_token %}
+                <div class="row g-4 mb-3">
+                    <div class="col-lg-4">
+                        <div class="form-floating">
+                            {% if user.is_authenticated %}
+                            <input type="text" class="form-control" id="id_name" value="{{ user.first_name }}" disabled>
+                            {% else %}
+                            {{ form.name }}
+                            {% endif %}
+                            <label for="id_name">Имя</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-floating">
+                            {% if user.is_authenticated %}
+                            <input type="text" class="form-control" id="staticEmail" value="{{ user.email }}" disabled>
+                            {% else %}
+                            {{ form.email }}
+                            {% endif %}
+                            <label for="staticEmail">Электронная почта</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-floating">
+                          {{ form.phone_number }}
+                          <label for="id_phone_number">{{ form.phone_number.label}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-4 mb-3">
+                    <div class="col-lg-6">
+                        <div class="form-floating" data-url="{% url 'appointment:get_clinics' %}">
+                            {{ form.clinic }}
+                            <label for="id_clinic">{{ form.clinic.label }}</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-floating" data-url="{% url 'appointment:get_dates' %}">
+                            {{ form.date}}
+                            <label for="id_date">{{ form.date.label }}</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-floating" data-url="{% url 'appointment:get_timetable' %}">
+                            {{ form.time}}
+                            <label for="id_time">{{ form.time.label }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-lg">
+                        <div class="form-floating">
+                            {{ form.description}}
+                            <label for="id_description">{{ form.description.label }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-lg-12 d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Записаться на прием</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-5">
+            <p style="line-height: 1.2;"><small class="text-muted">Клиники, в которых можно воспользоваться услагами Екатерины, расположены в удобных локациях города Краснодара. Выберите удобную для Вас на карте:</small></p>
+            <div class="ratio ratio-16x9 justify-content-center">
+                <iframe class="border p-1" src="https://yandex.ru/map-widget/v1/?um=constructor%3A1282440056bd59489a34fca68d4806513107ca8f0b78192f5d657585c78b0432&amp;source=constructor"></iframe>
+            </div>
+        </div>
+    </div>
 </main>
+{% endblock %}
+
+{% load static %}
+
+{% block script %}
+<script type="module" src="{% static 'appointment/appointment.js' %}"></script>
 {% endblock %}

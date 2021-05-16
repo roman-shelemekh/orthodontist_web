@@ -7,13 +7,21 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.detail import SingleObjectMixin
 from django.db.models import Count, Q
 from django.utils import timezone
+from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm, SearchForm
 from ask.models import Question
 from appointment.models import Appointment
-from .forms import SignupForm, LoginForm, UserUpdateForm, ProfileUpdateForm, SearchForm
+from appointment.views import AppointmentView
+from feedback.models import Feedback
 
 
-def index(request):
-    return render(request, 'index/index.html')
+class IndexView(AppointmentView):
+    template_name = 'index/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['feedback1'], context['feedback2'], context['feedback3'] = Feedback.objects.filter(is_published=True)[:3]
+        return context
+
 
 def signup(request):
     if request.method == 'POST':
