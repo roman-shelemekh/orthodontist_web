@@ -13,8 +13,8 @@ class MyChoiceField(forms.ChoiceField):
 class AppointmentForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}),
                            label='Имя')
-    email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Электронный адрес'}),
-                             label='Электронный адрес')
+    email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+                             label='Email')
     phone_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Номер телефона'}),
                                    label='Номер телефона')
     clinic = MyChoiceField(widget=forms.Select(attrs={'class': 'form-select'}), label='Клиника')

@@ -12,7 +12,7 @@
   }
 }
 .text-start{
-    min-height: 12rem;
+    min-height: 14rem;
 }
 .marketing .col-lg-4 {
   margin-bottom: 1.5rem;
@@ -27,16 +27,16 @@
 }
 </style>
 
-<main class="container">
+<main class="container pb-3">
     <div class="row featurette">
         <div class="col-md-5">
             <img src="{% static 'profile.png' %}" alt="">
         </div>
         <div class="col-md-7 pt-2">
-            <h1 class="featurette-heading">Екатерина Бахур</h1>
-            <h2 class="text-muted">стоматолог-ортодонт</h2>
+            <h1 class="featurette-heading display-5">Екатерина Бахур</h1>
+            <h2 class="text-muted display-6">стоматолог-ортодонт</h2>
             <p class="lead">Оказание профессиональных ортодонтических услуг любой сложности с применением самых совеременных практик.</p>
-            <button type="button" class="btn btn-outline-primary btn-lg">О враче</button>
+            <a class="btn btn-outline-primary btn-lg" href="{% url 'about' %}">О враче</a>
         </div>
     </div>
     <div class="container marketing mt-5">
@@ -45,20 +45,20 @@
                 <img class="rounded-circle" width="140" height="140" src="{% static '3.png' %}" alt="">
                 <h2>Опыт других пациентов</h2>
                 <p>На сайте собран опыт десятков пациентов, успешно завершивших свое лечение. Среди их вопросов может найтись решение Вашей проблемы</p>
-                <p><a class="btn btn-outline-primary" href="#">Все вопросы</a></p>
+                <p><a class="btn btn-outline-primary" href="{% url 'ask:index' %}">Все вопросы</a></p>
             </div>
             <div class="col-lg-4">
                 <img class="rounded-circle" width="140" height="140" src="{% static '2.png' %}" alt="">
                 <h2>Личный<br>кабинет</h2>
-                <p>Создайте личный кабинет, через который Вы сможете легко управлять своими записями, задавать вопросы специалистам и оставлять отзывы</p>
-                <p><a class="btn btn-outline-primary" href="#">Зарегистрироваться</a></p>
+                <p>Создайте личный кабинет, через который Вы сможете легко управлять своими записями, задавать вопросы специалисту и оставлять отзывы</p>
+                <p><a class="btn btn-outline-primary" href="{% if user.id %}{% url 'user' user.id %}{% else %}{% url 'signup' %}{% endif %}">Зарегистрироваться</a></p>
             </div>
             <div class="col-lg-4">
                 <img class="rounded-circle" width="140" height="140" src="{% static '1.png' %}" alt="">
 
                 <h2>Запишитесь<br>на прием</h2>
                 <p>Если Вы уже изучили много информации в интернете, но до сих пор не знаете, куда двигаться, запишитесь на бесплатную консультацию</p>
-                <p><a class="btn btn-outline-primary" href="#">Записаться</a></p>
+                <p><a class="btn btn-outline-primary" href="{% url 'appointment:index' %}">Записаться</a></p>
             </div>
         </div>
     </div>
@@ -134,7 +134,7 @@
                             {% else %}
                             {{ form.email }}
                             {% endif %}
-                            <label for="staticEmail">Электронная почта</label>
+                            <label for="staticEmail">Email</label>
                         </div>
                     </div>
                     <div class="col-lg-4">

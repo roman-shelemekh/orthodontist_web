@@ -23,6 +23,9 @@ class IndexView(AppointmentView):
         return context
 
 
+def about(request):
+    return render(request, 'index/about.html')
+
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Екатерина Бахур | {{ block.super }}{% endblock %}
+
+{% block content %}
+<style>
+    .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+        }
+    }
+    .anchor {
+        display: block;
+        position: relative;
+        top: -4.5rem;
+        visibility: hidden;
+    }
+    .sticky-lg-top { top: 4.5rem; }
+</style>
+
+<main class="container pb-5">
+    <div class="row">
+        <div class="col-lg-3">
+            <nav class="small sticky-lg-top">
+                <h2 class="pb-3 mb-4 border-bottom"><a class="text-reset text-decoration-none" href="#about">О враче</a></h2>
+                <ul class="list-unstyled ps-3">
+                  <li class="mb-3">
+                      <a class="text-reset text-decoration-none lead" href="#edu">Образование</a>
+                  </li>
+                  <li class="mb-3">
+                      <a class="text-reset text-decoration-none lead" href="#qualification">Повышение квалификации</a>
+                  </li>
+                  <li class="mb-3">
+                      <a class="text-reset text-decoration-none lead" href="#profile">Профиль лечения</a>
+                  </li>
+                  <li class="mb-3">
+                      <a class="text-reset text-decoration-none lead" href="#results">Результаты работы</a>
+                  </li>
+                </ul>
+            </nav>
+
+        </div>
+        <div class="col-lg-9">
+            <div class="w-50 float-lg-end ms-2">
+                <img class="img-fluid border p-1" src="{% static 'index/about.jpg' %}" alt="">
+            </div>
+            <div class="anchor" id="about"></div>
+            <p class="lead">Бахур Екатерина Сергеевна является практикующим стоматологом-ортодонтом с опытом
+                работы 5 лет.</p>
+            <p class="lead">Окончила стоматологический факультет КубГМУ в 2016 году, получила диплом по специальности
+                «Стоматология», а также прошла все этапы аккредитации по направлению «Врач-стоматолог». Во время
+                прохождения ординатуры в 2016-2018 гг. по специальности «Ортодонтия» осуществляла приём пациентов
+                на базе кафедры детской стоматологии, ортодонтии и челюстно-лицевой хирургии. C 2016 года
+                постоянно повышает квалификацию, посещая лекции и мастер-классы высокого уровня.</p>
+            <div class="anchor" id="edu"></div>
+            <h4>Образование</h4>
+            <p class="lead">2016 — Базовое образование, Кубанский государственный медицинский университет (стоматология)</p>
+             <p class="lead">2016 — Интернатура, Кубанский государственный медицинский университет (стоматология терапевтическая)</p>
+            <p class="lead">2018 — Ординатура, Кубанский государственный медицинский университет (ортодонтия/врач-ортодонт)</p>
+            <div class="anchor" id="qualification"></div>
+            <h4>Повышение квалификации</h4>
+            <p class="lead">2018 — Актуальные вопросы применения 3D технологий в современной стоматологической практике</p>
+            <p class="lead">2018 — 4 ступени курса "Школа ортодонтии" - "Шаги успешного лечения. Диагностика. Планирование"</p>
+            <p class="lead">2019 — ХХ съезд ортодонтов России</p>
+            <p class="lead">2019 — Ormko - Лечение различных аномалий прикуса с использованием самолигирующей системы</p>
+            <div class="anchor" id="profile"></div>
+            <h4>Профиль лечения</h4>
+            <ul class="lead">
+                <li>нарушение функционирования речевого аппарата и дыхательной системы;</li>
+                <li>аномальное развитие формы лица;</li>
+                <li>нарушение жевательной функции;</li>
+                <li>формирование дистального, открытого, глубокого, перекрестного или мезиального прикуса;</li>
+                <li>нарушение расположения некоторых зубов;</li>
+                <li>нарушение расположения всего зубного ряда.</li>
+            </ul>
+            <div class="anchor" id="results"></div>
+            <h4>Результаты работы</h4>
+            <div class="album">
+                <div class="container">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        <div class="col">
+                            <div class="card shadow-sm">
+                                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                                <div class="card-body">
+                                    <p class="card-text">Здесь будет краткое описание к фото.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card shadow-sm">
+                                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                                <div class="card-body">
+                                    <p class="card-text">Здесь будет краткое описание к фото.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card shadow-sm">
+                                <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+                                <div class="card-body">
+                                    <p class="card-text">Здесь будет краткое описание к фото.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
     <title>{% block title %}Вопрос ортодонту{% endblock %}</title>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
             <div class="container-fluid">
@@ -22,7 +22,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false" href="#">Врач</a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                                <li><a class="dropdown-item" href="#">О враче</a></li>
+                                <li><a class="dropdown-item" href="{% url 'about' %}">О враче</a></li>
                                 <li><a class="dropdown-item" href="{% url 'appointment:index' %}">Запись на прием</a></li>
                                 <li><a class="dropdown-item" href="{% url 'feedback:index' %}">Отзывы пациентов</a></li>
                             </ul>
@@ -65,30 +65,27 @@
         </nav>
     </header>
     {% block content %}{% endblock %}
-    <footer class="text-center text-lg-start bg-light text-muted mt-5">
+    <footer class="text-center text-lg-start bg-light text-muted mt-auto">
         <section class="p-2">
             <div class="container text-center text-md-start mt-3">
                 <div class="row mt-3">
                     <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
-                      <!-- Content -->
-                      <h6 class="text-uppercase fw-bold mb-4">Спроси у ортодонта</h6>
-                      <p>Сайт стоматолога-ортодонта Екатеры Бахур</p>
+                        <h6 class="text-uppercase fw-bold mb-4">Вопрос ортодонту</h6>
+                        <p>Сайт стоматолога-ортодонта Екатеры Бахур</p>
                     </div>
                     <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                         <p><a href="{% url 'ask:index' %}" class="text-reset">Все вопросы</a></p>
                         <p><a href="{% url 'ask:ask_question' %}" class="text-reset">Задать вопрос</a></p>
-                        <p><a href="{% url 'appointment:index' %}" class="text-reset">Записаться на прием</a></p>
+                        <p><a href="{% url 'search' %}?search_input=" class="text-reset">Поиск по вопросам</a></p>
                     </div>
                     <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
                         <p><a href="{% if user.id %}{% url 'user' user.id %}{% else %}{% url 'login' %}{% endif %}" class="text-reset">Личный кабинет</a></p>
+                        <p><a href="{% url 'appointment:index' %}" class="text-reset">Записаться на прием</a></p>
                         <p><a href="{% url 'feedback:index' %}" class="text-reset">Оставить отзыв</a></p>
-
-                        <p><a href="{% if user.id %}{% url 'appointments' user.id %}{% else %}{% url 'login' %}{% endif %}" class="text-reset">Управлять записями</a></p>
-
                     </div>
                     <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
                         <p><a href="mailto:orthodental@tut.by" class="text-reset text-decoration-none"><i class="fas fa-envelope me-3"></i>orthodental@tut.by</a></p>
-                        <p><i class="fas fa-phone me-3"></i></i>+70123456789</p>
+                        <p><i class="fas fa-phone me-3"></i></i>+79181234567</p>
                         <p><a href="#" class="text-reset text-decoration-none"><i class="fab fa-telegram me-3"></i></i>@YourOrthodontistBot</a></p>
                     </div>
                 </div>

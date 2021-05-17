@@ -48,7 +48,7 @@
                 {% endif %}
             </nav>
             <div class="mt-3"><small class="text-muted">ID пользователя: {{ userdata.id }}</small></div>
-            <div class="mt-2 mb-4"><small class="text-muted">Присоединился {{ userdata.date_joined.date }}</small></div>
+            <div class="mt-2 mb-4"><small class="text-muted">Присоединился {{ userdata.date_joined.date|date:'j E o' }}</small></div>
         </div>
         <div class="col-md-9">
             {% if messages %}
