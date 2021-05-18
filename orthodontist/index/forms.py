@@ -14,20 +14,16 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'password1', 'password2']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя*'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email*'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super(SignupForm, self).__init__(*args, **kwargs)
-        self.fields['email'].widget.attrs['class'] = 'form-control'
-        self.fields['email'].widget.attrs['type'] = 'email'
-        self.fields['email'].widget.attrs['placeholder'] = 'Электронный адрес*'
-        self.fields['first_name'].widget.attrs['class'] = 'form-control'
-        self.fields['first_name'].widget.attrs['placeholder'] = 'Имя*'
-        self.fields['last_name'].widget.attrs['class'] = 'form-control'
-        self.fields['last_name'].widget.attrs['placeholder'] = 'Фамилия'
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password1'].widget.attrs['placeholder'] = 'Пароль*'
-        self.fields['password1'].help_text = 'Ваш пароль должен содержать как минимум 8 символов и не может ' \
-                                             'состоять только из цифр'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['placeholder'] = 'Повторите пароль*'
 
@@ -48,11 +44,13 @@ class SignupForm(UserCreationForm):
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']
         if not first_name:
-            raise forms.ValidationError('Поле "Имя" является обязательным для заполнения.')
+            raise forms.ValidationError('Обязательное поле.')
         return first_name
 
     def clean_email(self):
         email = self.cleaned_data['email']
+        if not email:
+            raise forms.ValidationError('Обязательное поле.')
         if email in User.objects.all().values_list('email', flat=True):
             raise forms.ValidationError('Пользователь с таким электронным адресом уже существует.')
         return email
@@ -85,22 +83,23 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
-
-    def __init__(self, *args, **kwargs):
-        super(UserUpdateForm, self).__init__(*args, **kwargs)
-        self.fields['first_name'].widget.attrs['class'] = 'form-control'
-        self.fields['first_name'].widget.attrs['placeholder'] = 'Имя'
-        self.fields['last_name'].widget.attrs['class'] = 'form-control'
-        self.fields['last_name'].widget.attrs['placeholder'] = 'Фамилия'
-        self.fields['email'].widget.attrs['class'] = 'form-control'
-        self.fields['email'].widget.attrs['type'] = 'email'
-        self.fields['email'].widget.attrs['placeholder'] = 'Электронный адрес*'
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Фамилия'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
+        }
 
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']
         if not first_name:
-            raise forms.ValidationError('Поле "Имя" является обязательным для заполнения.')
+            raise forms.ValidationError('Обязательное поле.')
         return first_name
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not email:
+            raise forms.ValidationError('Обязательное поле.')
+        return email
 
 
 class ProfileUpdateForm(forms.ModelForm):
@@ -109,6 +108,9 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['image']
         labels = {
             "image": "Фото профиля"
+        }
+        widgets = {
+            'image': forms.FileInput(attrs={'class': 'form-control'})
         }
 
 

@@ -1,38 +1,98 @@
 {% extends "base.html" %}
 {% block title %}Регистрация | {{ block.super }}{% endblock %}
 {% block content %}
-<main class="container">
-    <div class="row justify-content-center text-center">
-        <div class="col-md-4">
-            {% for e in form.non_field_errors %}
-            <div class="alert alert-danger">{{ e }}</div>
-            {% endfor %}
-            <form class="signup" method="post">
-                {% csrf_token %}
-                <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
-                {{ form.first_name }}
-                {{ form.last_name }}
-                {{ form.email }}
-                {{ form.password1 }}
-                {{ form.password2 }}
-                <div class="checkbox mb-3">
-                    <label>{{ form.remember_me }} {{ form.remember_me.label }}</label>
-                </div>
-                <button class="w-100 btn btn-lg btn-primary" type="submit">Зарегистрироваться</button>
-            </form>
-            {% for field in form %}
-            {% if field.errors %}
-            <dev style="color: red;">{{ field.errors }}</dev>
-            {% endif %}
-            {% endfor %}
-            <div>
-                <div class="mb-2"><small class="text-muted">* Обязательные для заполнения поля</small></div>
-                <div class="mb-2"><small class="text-muted">{{ form.password1.help_text }}</small></div>
-            </div>
-            <div>
-                <small class="text-muted">Уже зарегистрированы? <a class="ml-2" href="{% url 'login' %}">Войти</a></small>
-            </div>
+<main class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 mb-3">
+            <h2>Регистрация</h2>
         </div>
     </div>
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-5">
+                <div class="form-floating">
+                    {{ form.first_name }}
+                    <label for="id_first_name">Имя*</label>
+                    {% if form.first_name.errors %}
+                    <div id="id_first_name" class="invalid-feedback">
+                        {{ form.first_name.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-5">
+                <div class="form-floating">
+                    {{ form.last_name }}
+                    <label for="id_last_name">Фамилия</label>
+                    {% if form.last_name.errors %}
+                    <div id="id_last_name" class="invalid-feedback">
+                        {{ form.last_name.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-5">
+                <div class="form-floating">
+                    {{ form.email }}
+                    <label for="id_last_name">Email*</label>
+                    {% if form.email.errors %}
+                    <div id="id_email" class="invalid-feedback">
+                        {{ form.email.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-5">
+                <div class="form-floating">
+                    {{ form.password1 }}
+                    <label for="id_password1">Пароль*</label>
+                    {% if form.password1.errors %}
+                    <div id="id_password1" class="invalid-feedback">
+                        {{ form.password1.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-5">
+                <div class="form-floating">
+                    {{ form.password2 }}
+                    <label for="id_password2">Повторите пароль*</label>
+                    {% if form.password2.errors %}
+                    <div id="id_password2" class="invalid-feedback">
+                        {{ form.password2.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-5  mb-3">
+               <div class="checkbox">
+                   <label>{{ form.remember_me }} {{ form.remember_me.label }}</label>
+               </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-3">
+            <div class="col-lg-5">
+               <button class="w-100 btn btn-lg btn-primary" type="submit">Зарегистрироваться</button>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-3 text-center">
+            <div class="col-lg-5">
+                <div class="mb-2"><small class="text-muted">* Обязательные для заполнения поля</small></div>
+                <div class="mb-2"><small class="text-muted">Ваш пароль должен содержать как минимум 8 символов и не может состоять только из цифр</small></div>
+            </div>
+        </div>
+
+    </form>
 </main>
 {% endblock %}

@@ -33,8 +33,13 @@ def signup(request):
             user = form.save()
             form.log_in(request, user)
             return HttpResponseRedirect(reverse('user', args=[request.user.id]))
+        else:
+            for field in form:
+                if field.errors:
+                    field.field.widget.attrs['class'] += ' is-invalid'
     else:
         form = SignupForm()
+
     return render(request, 'index/signup.html', {'form': form})
 
 
@@ -95,7 +100,7 @@ class UserViewUpdate(UserRatingMixin, DetailView):
     context_object_name = 'userdata'
 
     def dispatch(self, request, *args, **kwargs):
-        if kwargs['pk'] != request.user.id:
+        if self.get_object() != request.user:
             return HttpResponseForbidden()
         self.u_form = UserUpdateForm(instance=request.user)
         self.p_form = ProfileUpdateForm(instance=request.user.profile)
@@ -117,9 +122,15 @@ class UserViewUpdate(UserRatingMixin, DetailView):
             messages.success(request, 'Ваш профель изменен')
             return HttpResponseRedirect(reverse('user', args=(request.user.id,)))
         else:
-            if u_form.cleaned_data['email'] in emails:
-                u_form.add_error(field='email', error='Пользователь с таким электронным адресом уже существует.')
             self.object = self.get_object()
+            if u_form.cleaned_data.get('email') and u_form.cleaned_data.get('email') in emails:
+                u_form.add_error(field='email', error='Пользователь с таким электронным адресом уже существует.')
+            for field in u_form:
+                if field.errors:
+                    field.field.widget.attrs['class'] += ' is-invalid'
+            for field in p_form:
+                if field.errors:
+                    field.field.widget.attrs['class'] += ' is-invalid'
             context = self.get_context_data(**kwargs)
             context['u_form'] = u_form
             context['p_form'] = p_form

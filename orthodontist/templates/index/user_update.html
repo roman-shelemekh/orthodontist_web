@@ -1,28 +1,40 @@
 {% extends "user_base.html" %}
 {% block user_questions %}
-                    <div class="mb-3">
-                        <h5>Изменить профиль</h5>
+            <div class="mb-3">
+                <h5>Изменить профиль</h5>
+            </div>
+            <form class="signup needs-validation" method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+
+                <div class="form-floating">
+                    {{ u_form.first_name }}
+                    <label for="id_first_name">Имя</label>
+                    {% if u_form.first_name.errors %}
+                    <div id="id_first_name" class="invalid-feedback">
+                        {{ u_form.first_name.errors }}
                     </div>
-                    <form class="signup" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        {{ u_form.first_name.label }}
-                        {{ u_form.first_name }}
-                        {{ u_form.last_name.label }}
-                        {{ u_form.last_name }}
-                        {{ u_form.email.label }}
-                        {{ u_form.email }}
-                        {{ p_form.image.label }}<br>
-                        {{ p_form.image }}
-                        <button class="w-100 btn btn-lg btn-primary" type="submit">Сохранить изменения</button>
-                        {% for field in u_form %}
-                        {% if field.errors %}
-                        <div class="text-center" style="color: red;">{{ field.errors }}</div>
-                        {% endif %}
-                        {% endfor %}
-                        {% for field in p_form %}
-                        {% if field.errors %}
-                        <div class="text-center" style="color: red;">{{ field.errors }}</div>
-                        {% endif %}
-                        {% endfor %}
-                    </form>
+                    {% endif %}
+                </div>
+                <div class="form-floating">
+                    {{ u_form.last_name }}
+                    <label for="id_last_name">Фамилия</label>
+                    {% if u_form.last_name.errors %}
+                    <div id="id_last_name" class="invalid-feedback">
+                        {{ u_form.last_name.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="form-floating">
+                    {{ u_form.email }}
+                    <label for="id_last_name">Email</label>
+                    {% if u_form.email.errors %}
+                    <div id="id_email" class="invalid-feedback">
+                        {{ u_form.email.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                {{ p_form.image.label }}
+                {{ p_form.image }}
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Сохранить изменения</button>
+            </form>
 {% endblock %}
