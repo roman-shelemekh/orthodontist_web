@@ -14,7 +14,7 @@ class AppointmentForm(forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}),
                            label='Имя')
     email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
-                             label='Email')
+                            label='Email')
     phone_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Номер телефона'}),
                                    label='Номер телефона')
     clinic = MyChoiceField(widget=forms.Select(attrs={'class': 'form-select'}), label='Клиника')
@@ -49,7 +49,6 @@ class AppointmentForm(forms.Form):
         if not re.match(r'^\S+@\S+\.\S+$', email):
             raise forms.ValidationError('Введите корректный электронный адрес.')
         return email
-
 
     def send_email(self):
         date = datetime.strptime(self.cleaned_data['date'], '%Y-%m-%d')

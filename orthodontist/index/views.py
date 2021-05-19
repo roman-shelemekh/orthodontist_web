@@ -26,6 +26,7 @@ class IndexView(AppointmentView):
 def about(request):
     return render(request, 'index/about.html')
 
+
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -34,9 +35,7 @@ def signup(request):
             form.log_in(request, user)
             return HttpResponseRedirect(reverse('user', args=[request.user.id]))
         else:
-            for field in form:
-                if field.errors:
-                    field.field.widget.attrs['class'] += ' is-invalid'
+            form.validation_error_class()
     else:
         form = SignupForm()
 
@@ -49,13 +48,13 @@ def logout_view(request):
 
 def login_view(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = LoginForm(request.POST, request=request)
         url = request.POST.get('next', '/')
         if form.is_valid():
-            if form.log_in(request):
-                return HttpResponseRedirect(url)
-            else:
-                return render(request, 'index/login.html', {'form': form, 'error_message': 'Неверные логин или пароль'})
+            form.log_in(request)
+            return HttpResponseRedirect(url)
+        else:
+            form.validation_error_class()
     else:
         form = LoginForm()
     return render(request, 'index/login.html', {'form': form})
@@ -82,7 +81,7 @@ class UserView(UserRatingMixin, SingleObjectMixin, ListView):
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        queryset = Question.objects.annotated()
+        queryset = Question.objects.annotated().filter(author=self.object)
         return queryset.order_by('-date')
 
 
@@ -125,12 +124,8 @@ class UserViewUpdate(UserRatingMixin, DetailView):
             self.object = self.get_object()
             if u_form.cleaned_data.get('email') and u_form.cleaned_data.get('email') in emails:
                 u_form.add_error(field='email', error='Пользователь с таким электронным адресом уже существует.')
-            for field in u_form:
-                if field.errors:
-                    field.field.widget.attrs['class'] += ' is-invalid'
-            for field in p_form:
-                if field.errors:
-                    field.field.widget.attrs['class'] += ' is-invalid'
+            u_form.validation_error_class()
+            p_form.validation_error_class()
             context = self.get_context_data(**kwargs)
             context['u_form'] = u_form
             context['p_form'] = p_form

@@ -1,6 +1,5 @@
 from django import forms
 from .models import Feedback
-import re
 
 
 class FeedbackForm(forms.ModelForm):
@@ -18,4 +17,3 @@ class FeedbackForm(forms.ModelForm):
             'email': 'Электронный адре',
             'comment': 'Отзыв'
         }
-

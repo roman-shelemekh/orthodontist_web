@@ -7,7 +7,15 @@ from datetime import timedelta
 from .models import Profile
 
 
-class SignupForm(UserCreationForm):
+class ErrorClassMixin:
+
+    def validation_error_class(self):
+        for field in self:
+            if field.errors:
+                field.field.widget.attrs['class'] += ' is-invalid'
+
+
+class SignupForm(ErrorClassMixin, UserCreationForm):
     remember_me = forms.BooleanField(widget=forms.CheckboxInput(attrs={'type': 'checkbox'}), label='Запомнить меня',
                                      required=False)
 
@@ -56,7 +64,14 @@ class SignupForm(UserCreationForm):
         return email
 
 
-class LoginForm(forms.Form):
+
+
+class LoginForm(ErrorClassMixin ,forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(LoginForm, self).__init__(*args, **kwargs)
+
     email = forms.CharField(
         widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Электронная почта'}))
     password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'type': 'password',
@@ -65,9 +80,9 @@ class LoginForm(forms.Form):
                                      required=False)
 
     def log_in(self, request):
-        email = self.cleaned_data['email']
-        password = self.cleaned_data['password']
-        remember_me = self.cleaned_data['remember_me']
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+        remember_me = self.cleaned_data.get('remember_me')
         user = authenticate(request, username=email, password=password)
         if user:
             login(request, user)
@@ -77,8 +92,15 @@ class LoginForm(forms.Form):
                 request.session.set_expiry(0)
             return True
 
+    def clean(self):
+        if not self.errors and not self.log_in(self.request):
+            for field in self:
+                if field.field.widget.attrs.get('class'):
+                    field.field.widget.attrs['class'] += ' is-invalid'
+            raise forms.ValidationError('Неверные логин или пароль.')
 
-class UserUpdateForm(forms.ModelForm):
+
+class UserUpdateForm(ErrorClassMixin, forms.ModelForm):
 
     class Meta:
         model = User
@@ -102,7 +124,7 @@ class UserUpdateForm(forms.ModelForm):
         return email
 
 
-class ProfileUpdateForm(forms.ModelForm):
+class ProfileUpdateForm(ErrorClassMixin, forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image']
