@@ -26,7 +26,7 @@ flush:
 
 
 start-prod:
-	docker-compose -f docker-compose.prod.yml up --build --remove-orphans
+	docker-compose -f docker-compose.prod.yml up -d --build --remove-orphans
 	docker-compose -f docker-compose.prod.yml exec orthodontist python manage.py migrate --noinput
 	docker-compose -f docker-compose.prod.yml exec orthodontist python manage.py collectstatic --no-input --clear
 
