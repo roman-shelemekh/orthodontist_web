@@ -19,7 +19,9 @@ class IndexView(AppointmentView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['feedback1'], context['feedback2'], context['feedback3'] = Feedback.objects.filter(is_published=True)[:3]
+        latest_feedbacks = Feedback.objects.filter(is_published=True)[:3]
+        if len(latest_feedbacks) == 3:
+            context['feedback1'], context['feedback2'], context['feedback3'] = latest_feedbacks
         return context
 
 

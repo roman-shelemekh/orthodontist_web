@@ -42,7 +42,6 @@ class QuestionDetail(DetailView):
         if form.is_valid():
             form.cleaned_data['question'] = self.get_object()
             form.cleaned_data['author'] = request.user
-            print(form.cleaned_data)
             form.save()
             return HttpResponseRedirect(reverse('ask:question', args=(kwargs['pk'],)))
 
@@ -118,7 +117,6 @@ class QuestionListAjax(generics.ListAPIView):
 
     def get_queryset(self):
         order_by = self.request.GET.get('order_by')
-        print(order_by)
         queryset = Question.objects.annotated()
         if not order_by or order_by == 'new':
             queryset = queryset.order_by('-date')

@@ -6,7 +6,7 @@
             <form class="signup needs-validation" method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
 
-                <div class="form-floating">
+                <div class="form-floating mb-3">
                     {{ u_form.first_name }}
                     <label for="id_first_name">Имя</label>
                     {% if u_form.first_name.errors %}
@@ -15,7 +15,7 @@
                     </div>
                     {% endif %}
                 </div>
-                <div class="form-floating">
+                <div class="form-floating mb-3">
                     {{ u_form.last_name }}
                     <label for="id_last_name">Фамилия</label>
                     {% if u_form.last_name.errors %}
@@ -24,7 +24,7 @@
                     </div>
                     {% endif %}
                 </div>
-                <div class="form-floating">
+                <div class="form-floating mb-3">
                     {{ u_form.email }}
                     <label for="id_last_name">Email</label>
                     {% if u_form.email.errors %}
@@ -33,8 +33,10 @@
                     </div>
                     {% endif %}
                 </div>
-                {{ p_form.image.label }}
-                {{ p_form.image }}
+                <div class="mb-3">
+                    {{ p_form.image.label }}
+                    {{ p_form.image }}
+                </div>
                 <button class="w-100 btn btn-lg btn-primary" type="submit">Сохранить изменения</button>
             </form>
 {% endblock %}
