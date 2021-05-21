@@ -30,3 +30,14 @@ start-prod:
 
 stop-prod:
 	docker-compose -f docker-compose.prod.yml down --remove-orphans
+
+backup:
+	docker-compose stop orthodontist
+	docker-compose -f docker-compose.prod.yml run --rm media-backup
+
+restore:
+	docker-compose stop orthodontist
+	docker-compose -f docker-compose.prod.yml run --rm media-restore
+
+test-data:
+	docker-compose exec -T orthodontist python manage.py shell < orthodontist/test_data.py

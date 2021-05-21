@@ -23,6 +23,21 @@ services:
     depends_on:
       - db
 
+  media-backup:
+    image: alpine
+    tty: false
+    volumes:
+    - ./backup:/backup
+    - media_volume:/home/balthasar/orthodontist/media
+    command: sh -c "tar -cjf /backup/media_volume.tar.bz2 -C /home/balthasar/orthodontist/media ./"
+
+  media-restore:
+    image: alpine
+    volumes:
+    - ./backup:/backup
+    - media_volume:/home/balthasar/orthodontist/media
+    command: sh -c "rm -rf /home/balthasar/orthodontist/media/* /home/balthasar/orthodontist/media/..?* /home/balthasar/orthodontist/media/.[!.]* ; tar -C /home/balthasar/orthodontist/media/ -xjf /backup/media_volume.tar.bz2"
+
   nginx:
     build: ./nginx
     volumes:

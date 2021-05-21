@@ -31,7 +31,7 @@
         <div class="col-md-3">
             <small class="text-muted"><i class="fas fa-award"></i> Репутация: {{ rating }}</small>
         </div>
-        {% if user.is_superuser %}
+        {% if userdata.is_superuser %}
         <div class="col-md-1 ms-md-auto">
         <a class="btn btn-outline-primary btn-sm mt-3" href="{% url 'admin:index' %}" role="button"><i class="fas fa-user-cog"></i></a>
         </div>
