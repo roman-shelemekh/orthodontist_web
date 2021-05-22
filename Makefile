@@ -24,32 +24,28 @@ psql:
 flush:
 	docker-compose exec orthodontist python manage.py flush --no-input
 
-
 start-prod:
-	docker-compose -f docker-compose.prod.yml up --build --remove-orphans
-	
-launch-prod:	
+	docker-compose -f docker-compose.prod.yml up -d --build --remove-orphans
+	sleep 15
 	docker-compose -f docker-compose.prod.yml exec orthodontist python manage.py migrate --noinput
 	docker-compose -f docker-compose.prod.yml exec orthodontist python manage.py collectstatic --no-input --clear
 	docker-compose -f docker-compose.prod.yml exec orthodontist mkdir media/profile_pics
 	docker-compose -f docker-compose.prod.yml exec orthodontist cp staticfiles/default.png media/profile_pics/
 
-stop-prod:
+stop-prod: backup-data
 	docker-compose -f docker-compose.prod.yml down --remove-orphans
 
+
 test-data:
-	docker-compose exec -T orthodontist python manage.py shell < orthodontist/test_data.py
+	docker-compose -f docker-compose.prod.yml exec orthodontist python manage.py flush --no-input
+	docker-compose -f docker-compose.prod.yml exec -T orthodontist python manage.py shell < orthodontist/test_data.py
 
-backup-media:
-	docker run --rm --volumes-from orthodontist_prod_orthodontist_1 -v $$(pwd):/backup alpine tar cvf /backup/backup-media.tar home/balthasar/orthodontist/media
+backup-data:
+	docker run --rm --volumes-from orthodontist_prod_orthodontist_1 -v $$(pwd)/orthodontist/backup:/backup alpine tar cvf /backup/media_`date +%d-%m-%Y"_"%H_%M`.tar home/balthasar/orthodontist/media
+	docker-compose -f docker-compose.prod.yml exec db pg_dumpall -c -U orthodontist >  orthodontist/backup/db_`date +%d-%m-%Y"_"%H_%M`.sql
 
-restore-media:
-	docker run --rm --volumes-from orthodontist_prod_orthodontist_1 -v $$(pwd):/backup alpine sh -c "cd home/ && tar xvf /backup/backup-media.tar --strip 1 && ls -l /home/balthasar/orthodontist/media/profile_pics"
-
-backup-db:
-	docker-compose -f docker-compose.prod.yml exec db pg_dumpall -c -U orthodontist > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
-
-restore-db:
+restore-data:
+	docker run --rm --volumes-from orthodontist_prod_orthodontist_1 -v $$(pwd)/orthodontist/backup:/backup alpine sh -c "cd home/ && tar xvf /backup/$(media) --strip 1 && ls -l /home/balthasar/orthodontist/media/profile_pics"
 	docker-compose -f docker-compose.prod.yml exec orthodontist python manage.py flush --no-input
 	docker-compose -f docker-compose.prod.yml exec db psql --user=orthodontist --dbname=orthodontist_prod -c "CREATE DATABASE orthodontist;"
-	cat $(filename) | docker-compose -f docker-compose.prod.yml exec -T db psql -U orthodontist
+	cat orthodontist/backup/$(db) | docker-compose -f docker-compose.prod.yml exec -T db psql -U orthodontist

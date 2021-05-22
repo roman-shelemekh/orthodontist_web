@@ -50,4 +50,4 @@ class Appointment(models.Model):
         unique_together = ('date', 'time')
         verbose_name = 'запись на прием'
         verbose_name_plural = 'записи на прием'
-        ordering = ['-date', '-time', 'clinic']
+        ordering = ['date', 'time', 'clinic']
