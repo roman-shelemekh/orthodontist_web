@@ -3,6 +3,7 @@ from django.core.mail import send_mail
 from .models import Patient, Appointment, Clinic
 import re
 from datetime import datetime
+from index.forms import ErrorClassMixin
 
 
 class MyChoiceField(forms.ChoiceField):
@@ -10,7 +11,7 @@ class MyChoiceField(forms.ChoiceField):
         return True
 
 
-class AppointmentForm(forms.Form):
+class AppointmentForm(ErrorClassMixin, forms.Form):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Имя'}),
                            label='Имя')
     email = forms.CharField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}),
@@ -20,7 +21,7 @@ class AppointmentForm(forms.Form):
     clinic = MyChoiceField(widget=forms.Select(attrs={'class': 'form-select'}), label='Клиника')
     date = MyChoiceField(widget=forms.Select(attrs={'class': 'form-select'}), label='Дата')
     time = MyChoiceField(widget=forms.Select(attrs={'class': 'form-select'}), label='Время')
-    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', ' style': 'height: 100px', 'placeholder': 'Описание'}),
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'style': 'height: 100px', 'placeholder': 'Описание'}),
                                   label='Краткое изложение проблемы')
 
     def save(self):

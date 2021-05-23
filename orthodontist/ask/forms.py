@@ -1,19 +1,21 @@
 from django import forms
 from .models import Question, Answer
 from django.urls import reverse
+from index.forms import ErrorClassMixin
 
 
-class AskQuestionForm(forms.ModelForm):
+class AskQuestionForm(ErrorClassMixin, forms.ModelForm):
     class Meta:
         model = Question
         fields = ['title', 'text']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Вопрос кратко'}),
-            'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Подробное изложение вопроса'}),
+            'text': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Подробное изложение вопроса',
+                                          'style': 'height: 180px'}),
         }
         labels = {
-            'title': 'Заголовок',
-            'text': 'Вопрос'
+            'title': 'Вопрос кратко',
+            'text': 'Подробное изложение вопроса'
         }
 
     def save(self, commit=True):

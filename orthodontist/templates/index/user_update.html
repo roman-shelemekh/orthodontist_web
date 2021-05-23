@@ -11,7 +11,9 @@
                     <label for="id_first_name">Имя</label>
                     {% if u_form.first_name.errors %}
                     <div id="id_first_name" class="invalid-feedback">
-                        {{ u_form.first_name.errors }}
+                        {% for error in u_form.first_name.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -20,7 +22,9 @@
                     <label for="id_last_name">Фамилия</label>
                     {% if u_form.last_name.errors %}
                     <div id="id_last_name" class="invalid-feedback">
-                        {{ u_form.last_name.errors }}
+                        {% for error in u_form.last_name.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -29,7 +33,9 @@
                     <label for="id_last_name">Email</label>
                     {% if u_form.email.errors %}
                     <div id="id_email" class="invalid-feedback">
-                        {{ u_form.email.errors }}
+                        {% for error in u_form.email.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>

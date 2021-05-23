@@ -63,7 +63,10 @@ class AskQuestionView(FormView):
         form.cleaned_data['author'] = self.request.user
         form.save()
         return super().form_valid(form)
-
+    
+    def form_invalid(self, form):
+        form.validation_error_class()
+        return super(AskQuestionView, self).form_invalid(form)
 
 def delete_question(request, pk):
     question = get_object_or_404(Question, pk=pk)

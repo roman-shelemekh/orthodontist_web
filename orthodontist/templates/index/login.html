@@ -16,7 +16,9 @@
                     <label for="id_email">Email</label>
                     {% if form.email.errors %}
                     <div id="id_email" class="invalid-feedback">
-                        {{ form.email.errors }}
+                        {% for error in form.email.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -29,7 +31,9 @@
                     <label for="id_password">Пароль</label>
                     {% if form.password.errors %}
                     <div id="id_password" class="invalid-feedback">
-                        {{ form.password.errors }}
+                        {% for error in form.password.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                     {% if form.non_field_errors %}

@@ -1,8 +1,9 @@
 from django import forms
 from .models import Feedback
+from index.forms import ErrorClassMixin
 
 
-class FeedbackForm(forms.ModelForm):
+class FeedbackForm(ErrorClassMixin, forms.ModelForm):
 
     class Meta:
         model = Feedback

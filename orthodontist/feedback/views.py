@@ -35,9 +35,7 @@ class FeedbackView(FormMixin, ListView):
         return super(FeedbackView, self).form_valid(form)
 
     def form_invalid(self, form):
-        for field in form:
-            if field.errors:
-                field.field.widget.attrs['class'] += ' is-invalid'
+        form.validation_error_class()
         return super(FeedbackView, self).form_invalid(form)
 
     def post(self, request, *args, **kwargs):

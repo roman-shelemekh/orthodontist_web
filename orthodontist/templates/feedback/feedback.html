@@ -33,7 +33,9 @@
                     <label for="id_name">Имя</label>
                     {% if form.name.errors %}
                     <div id="id_name" class="invalid-feedback">
-                        {{ form.name.errors }}
+                        {% for error in form.name.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -48,7 +50,9 @@
                     <label for="staticEmail">Электронная почта</label>
                     {% if form.email.errors %}
                     <div id="id_email" class="invalid-feedback">
-                        {{ form.email.errors }}
+                        {% for error in form.email.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -61,7 +65,9 @@
                     <label for="id_comment">{{ form.comment.label }}</label>
                     {% if form.comment.errors %}
                     <div id="id_comment" class="invalid-feedback">
-                        {{ form.comment.errors }}
+                        {% for error in form.comment.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>

@@ -34,9 +34,7 @@ class AppointmentView(FormView):
         return super(AppointmentView, self).form_valid(form)
 
     def form_invalid(self, form):
-        for field in form:
-            if field.errors:
-                field.field.widget.attrs['class'] += ' is-invalid'
+        form.validation_error_class()
         return super(AppointmentView, self).form_invalid(form)
     
     

@@ -135,5 +135,4 @@ dmypy.json
 /.env.prod.db
 
 orthodontist/media/
-!*/default.png
 

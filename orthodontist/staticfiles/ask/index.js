@@ -22,7 +22,7 @@ function getQuestionList(url) {
             const date = new Date(question.date)
             const el = document.createElement('div')
             el.classList.add('row', 'justify-content-center', 'my-3')
-            el.innerHTML = '<div class="col-sm col-md-10">\n' +
+            el.innerHTML = '<div class="col-lg-9">\n' +
                 '                <div class="card">\n' +
                 '                    <div class="card-body">\n' +
                 '                        <div class="clearfix">\n' +

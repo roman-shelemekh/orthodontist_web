@@ -31,13 +31,12 @@ for i in range(1, 60, 3):
     )
     Question.objects.create(
         title=f'Это вопрос № {i + 2} от Круса',
-        text="""
-Французский бульдог (фр. bouledogue français) — порода собак. Некрупная, отличающаяся крупной, но короткой 
-мордой, плоским раздвоенным носом, широкой раздвоенной верхней губой. Стоячие уши, широкие у основания и 
-закругляющиеся сверху. Выступающие надбровные дуги отделены друг от друга глубокой бороздкой между глазами. 
-Бороздка не должна продолжаться на лбу, как у английских бульдогов. Затылочный бугор слабо развит. Могут 
-иметь самый разнообразный окрас: тигровый, бело-тигровый, палевый, бело-палевый.
-        """,
+        text=f'Французский бульдог (фр. bouledogue français) — порода собак. Некрупная, отличающаяся '
+             f'крупной, но короткой мордой, плоским раздвоенным носом, широкой раздвоенной верхней '
+             f'губой. Стоячие уши, широкие у основания и закругляющиеся сверху. Выступающие надбровные '
+             f'дуги отделены друг от друга глубокой бороздкой между глазами. Бороздка не должна продолжаться '
+             f'на лбу, как у английских бульдогов. Затылочный бугор слабо развит. Могут иметь самый '
+             f'разнообразный окрас: тигровый, бело-тигровый, палевый, бело-палевый.',
         author=user3
     )
 
@@ -89,7 +88,7 @@ def random_date():
     import datetime
     import random
     start_date = timezone.now().date()
-    end_date = timezone.now().date() + datetime.timedelta(days=60)
+    end_date = timezone.now().date() + datetime.timedelta(days=45)
     time_between_dates = end_date - start_date
     days_between_dates = time_between_dates.days
     random_number_of_days = random.randrange(days_between_dates)
@@ -102,7 +101,7 @@ for i in range(30):
         time = [datetime.time(9, 30), datetime.time(10, 00), datetime.time(10, 30),
                 datetime.time(11, 00), datetime.time(12, 00)]
         date = random_date()
-        for i in range(random.randint(1,5)):
+        for i in range(random.randint(1, 10)):
             day_time = time[:]
             Appointment.objects.create(clinic=random.choice(Clinic.objects.all()),
                                       date=date,

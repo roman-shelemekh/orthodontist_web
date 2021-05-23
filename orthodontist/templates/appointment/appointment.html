@@ -32,7 +32,9 @@
                     <label for="id_name">Имя</label>
                     {% if form.name.errors %}
                     <div id="id_name" class="invalid-feedback">
-                        {{ form.name.errors }}
+                        {% for error in form.name.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -47,7 +49,9 @@
                     <label for="staticEmail">Email</label>
                     {% if form.email.errors %}
                     <div id="id_email" class="invalid-feedback">
-                        {{ form.email.errors }}
+                        {% for error in form.email.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -58,7 +62,9 @@
                   <label for="id_phone_number">{{ form.phone_number.label}}</label>
                   {% if form.phone_number.errors %}
                   <div id="id_phone_number" class="invalid-feedback">
-                      {{ form.phone_number.errors }}
+                      {% for error in form.phone_number.errors %}
+                        {{ error }}
+                      {% endfor %}
                   </div>
                   {% endif %}
                 </div>
@@ -71,7 +77,9 @@
                     <label for="id_clinic">{{ form.clinic.label }}</label>
                     {% if form.clinic.errors %}
                     <div id="id_clinic" class="invalid-feedback">
-                        {{ form.clinic.errors }}
+                        {% for error in form.clinic.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -82,7 +90,9 @@
                     <label for="id_date">{{ form.date.label }}</label>
                     {% if form.date.errors %}
                     <div id="id_date" class="invalid-feedback">
-                        {{ form.date.errors }}
+                        {% for error in form.date.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -93,7 +103,9 @@
                     <label for="id_time">{{ form.time.label }}</label>
                     {% if form.time.errors %}
                     <div id="id_time" class="invalid-feedback">
-                        {{ form.time.errors }}
+                        {% for error in form.time.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
@@ -106,7 +118,9 @@
                     <label for="id_description">{{ form.description.label }}</label>
                     {% if form.description.errors %}
                     <div id="id_description" class="invalid-feedback">
-                        {{ form.description.errors }}
+                        {% for error in form.description.errors %}
+                        {{ error }}
+                        {% endfor %}
                     </div>
                     {% endif %}
                 </div>
