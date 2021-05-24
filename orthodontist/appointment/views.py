@@ -83,3 +83,8 @@ class ClinicsForMap(ListAPIView):
     queryset = Clinic.objects.all().order_by('name')
     serializer_class = ClinicSerializer
     pagination_class = None
+
+    def initial(self, request, *args, **kwargs):
+        if not request.is_ajax():
+            raise Http404()
+        return super(ClinicsForMap, self).initial(request, *args, **kwargs)
