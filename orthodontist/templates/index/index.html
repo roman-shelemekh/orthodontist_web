@@ -185,7 +185,8 @@
         <div class="col-lg-5">
             <p style="line-height: 1.2;"><small class="text-muted">Клиники, в которых можно воспользоваться услагами Екатерины, расположены в удобных локациях города Краснодара. Выберите удобную для Вас на карте:</small></p>
             <div class="ratio ratio-16x9 justify-content-center">
-                <iframe class="border p-1" src="https://yandex.ru/map-widget/v1/?um=constructor%3A1282440056bd59489a34fca68d4806513107ca8f0b78192f5d657585c78b0432&amp;source=constructor"></iframe>
+                <div id="map"></div>
+<!--                <iframe class="border p-1" src="https://yandex.ru/map-widget/v1/?um=constructor%3A1282440056bd59489a34fca68d4806513107ca8f0b78192f5d657585c78b0432&amp;source=constructor"></iframe>-->
             </div>
         </div>
     </div>
@@ -195,5 +196,7 @@
 {% load static %}
 
 {% block script %}
-<script type="module" src="{% static 'appointment/appointment.js' %}"></script>
+<script src="{% static 'appointment/appointment.js' %}" type="module"></script>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=b5d82f06-3c11-495e-8461-74b818294a04" type="text/javascript"></script>
+<script src="{% static 'index/maps.js' %}" type="text/javascript"></script>
 {% endblock %}

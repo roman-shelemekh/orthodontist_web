@@ -76,7 +76,7 @@ class AppointmentAdmin(admin.ModelAdmin):
 
 
 class ClinicAdmin(admin.ModelAdmin):
-    list_display = ('name', 'address')
+    list_display = ('name', 'address', 'phone_number1', 'phone_number2')
 
 
 class PatientAdmin(admin.ModelAdmin):

@@ -5,6 +5,9 @@ from django.contrib import messages
 from django.http import JsonResponse, Http404, HttpResponseRedirect
 from .forms import AppointmentForm
 from .models import Clinic, Appointment
+from .serializers import ClinicSerializer
+from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
 
 
 class AppointmentView(FormView):
@@ -74,3 +77,9 @@ def delete_appointment(request, pk):
         return HttpResponseRedirect(reverse('appointments', args=[request.user.id]))
     else:
         raise Http404()
+
+
+class ClinicsForMap(ListAPIView):
+    queryset = Clinic.objects.all().order_by('name')
+    serializer_class = ClinicSerializer
+    pagination_class = None

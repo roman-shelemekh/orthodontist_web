@@ -5,13 +5,17 @@ from django.utils import timezone
 class Clinic(models.Model):
     name = models.CharField(max_length=100, verbose_name='Название клиника', unique=True)
     address = models.CharField(max_length=100, verbose_name='Адрес клиники', unique=True)
+    latitude = models.DecimalField(verbose_name='Широта', max_digits=12, decimal_places=9)
+    longitude = models.DecimalField(verbose_name='Долгота', max_digits=12, decimal_places=9)
+    phone_number1 = models.CharField(max_length=20, verbose_name='Номер телефона', blank=True)
+    phone_number2 = models.CharField(max_length=20, verbose_name='Номер телефона(2)', blank=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name = 'клинику'
-        verbose_name_plural = 'Клиники'
+        verbose_name_plural = 'клиники'
 
 
 class Patient(models.Model):
@@ -24,7 +28,7 @@ class Patient(models.Model):
 
     class Meta:
         verbose_name = 'пациента'
-        verbose_name_plural = 'Пациенты'
+        verbose_name_plural = 'пациенты'
 
 class Appointment(models.Model):
     clinic = models.ForeignKey(Clinic, on_delete=models.CASCADE, verbose_name='Название клиника')
