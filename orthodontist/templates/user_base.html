@@ -5,7 +5,7 @@
 {% block content %}
 <main class="container">
 
-    <div class="row p-3 m-3 align-items-center border-bottom">
+    <div class="row p-3 m-3 mb-5 align-items-center border-bottom">
         <div class="col-md-2 d-flex justify-content-center mb-3">
             <div  class="user-pic-question">
                 <img src="{{ userdata.profile.image.url }}" alt="profile-pic">
@@ -37,7 +37,7 @@
         </div>
         {% endif %}
     </div>
-    <div class="row p-3 m-3">
+    <div class="row">
         <div class="col col-lg-3">
             <nav class="nav flex-column  border-bottom me-4">
                 <a class="nav-link" href="{% url 'user' userdata.id %}">Последние вопросы</a>
@@ -50,7 +50,7 @@
             <div class="mt-3 text-lg-start text-center"><small class="text-muted">ID пользователя: {{ userdata.id }}</small></div>
             <div class="mt-2 mb-4 text-lg-start text-center"><small class="text-muted">Присоединился {{ userdata.date_joined.date|date:'j E o' }}</small></div>
         </div>
-        <div class="col col-lg-9">
+        <div class="col-lg-9">
             {% if messages %}
             {% for message in messages %}
             <div class="alert alert-success" role="alert">{{ message }}</div>
