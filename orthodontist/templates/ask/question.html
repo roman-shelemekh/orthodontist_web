@@ -15,7 +15,7 @@
                 <div class="card-body">
                    <div class="clearfix">
                        {% if user.id == question.author.id %}
-                       <a href="{% url 'ask:delete_question' question.id %}" class="float-end" style="color:gray"><i class="far fa-trash-alt"></i></a>
+                       <a href="{% url 'ask:delete_question' question.id %}" class="float-end" style="color:gray" onclick="return confirm('Вы уверены?');"><i class="far fa-trash-alt"></i></a>
                        <a href="#" data-url="{% url 'ask:edit_question' question.id %}" class="float-end me-2" style="color:gray" id="edit-button"><i class="far fa-edit"></i></a>
                        {% endif %}
                        <div class="user-pic-question float-start mb-3">
@@ -45,7 +45,7 @@
         <div class="col-sm col-md-9">
             <div class="clearfix">
                 {% if user.id == answer.author.id %}
-                <a href="{% url 'ask:delete_answer' answer.id %}" class="float-end me-2" style="color:gray"><i class="far fa-trash-alt"></i></a>
+                <a href="{% url 'ask:delete_answer' answer.id %}" class="float-end me-2" style="color:gray" onclick="return confirm('Вы уверены?');"><i class="far fa-trash-alt"></i></a>
                 {% endif %}
                 <div class="user-pic-answer float-start mb-3">
                     <img src="{{ answer.author.profile.image.url }}" alt="{{ answer.author.first_name }}">
