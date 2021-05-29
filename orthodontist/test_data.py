@@ -75,9 +75,15 @@ Feedback.objects.create(name='Константин', email='kostya@tut.by', is_p
                                 'лечение у Екатерины Сергеевны уже полгода. Рассказала мне о некоторых решениях '
                                 'моих стоматологических проблем, о которых не говорили другие.')
 
-Clinic.objects.create(name='ДЕНТиК на Тургенева', address='ул. Тургенева, 23')
-Clinic.objects.create(name='Имплант на 40 лет победы', address='ул. 40 лет победы, 178/1')
-Clinic.objects.create(name='Имплант на Ставропольской', address='ул. Ставропольская, 135')
+Clinic.objects.create(name='ДЕНТиК на Тургенева', address='ул. Тургенева, 23',
+                      latitude=45.041687, longitude=38.954787,
+                      phone_number1='+71234567891', phone_number2='+71234567891')
+Clinic.objects.create(name='Имплант на 40 лет победы', address='ул. 40 лет победы, 178/1',
+                      latitude=45.055193, longitude=39.032096,
+                      phone_number1='+71234567891', phone_number2='+71234567891')
+Clinic.objects.create(name='Имплант на Ставропольской', address='ул. Ставропольская, 135',
+                      latitude=45.020341, longitude=39.026158,
+                      phone_number1='+71234567891', phone_number2='+71234567891')
 
 Patient.objects.create(name='Роман', email='shelemekh@tut.by', phone_number='+375295264')
 
