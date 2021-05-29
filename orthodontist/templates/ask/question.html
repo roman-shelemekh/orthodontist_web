@@ -3,7 +3,7 @@
 {% block title %} {{question }} | {{ block.super }}{% endblock %}
 
 {% block content %}
-<main class="container">
+<main class="container mb-5">
     {% if messages %}
     {% for message in messages %}
     <div class="alert alert-success" role="alert">{{ message }}</div>
