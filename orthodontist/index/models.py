@@ -1,9 +1,9 @@
-from PIL import Image
 import datetime
 from django.core.cache import cache
 from django.db import models
 from django.contrib.auth.models import User
 from orthodontist import settings
+from .tasks import image_resizing
 
 
 class Profile(models.Model):
@@ -16,19 +16,7 @@ class Profile(models.Model):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         super(Profile, self).save()
-        def crop_center(img):
-            img_width, img_height = img.size
-            return img.crop(((img_width - min(img.size)) // 2,
-                                 (img_height - min(img.size)) // 2,
-                                 (img_width + min(img.size)) // 2,
-                                 (img_height + min(img.size)) // 2))
-        img = Image.open(self.image.path)
-        img = crop_center(img)
-        if img.height > 500 or img.width > 500:
-            output_size = (500, 500)
-            img.thumbnail(output_size)
-        img.save(self.image.path)
-
+        image_resizing.delay(self.image.path)
 
     def last_seen(self):
         return cache.get(f'seen_{self.user.username}')

@@ -6,8 +6,8 @@ from django.http import JsonResponse, Http404, HttpResponseRedirect
 from .forms import AppointmentForm
 from .models import Clinic, Appointment
 from .serializers import ClinicSerializer
+from .tasks import send_email
 from rest_framework.generics import ListAPIView
-from rest_framework.response import Response
 
 
 class AppointmentView(FormView):
@@ -31,7 +31,8 @@ class AppointmentView(FormView):
 
     def form_valid(self, form):
         form.save()
-        form.send_email()
+        send_email.delay(form.cleaned_data['date'], form.cleaned_data['time'],
+                         form.cleaned_data['name'], form.cleaned_data['email'])
         messages.success(self.request, 'Вы успешно записались на прием. '
                                        'Сообщение с информацией о приеме отправлено на вашу почту')
         return super(AppointmentView, self).form_valid(form)

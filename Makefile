@@ -29,7 +29,7 @@ start-prod:
 	sleep 15
 	docker-compose -f docker-compose.prod.yml exec orthodontist python manage.py migrate --noinput
 	docker-compose -f docker-compose.prod.yml exec orthodontist python manage.py collectstatic --no-input --clear
-	docker-compose -f docker-compose.prod.yml exec orthodontist mkdir media/profile_pics
+	docker-compose -f docker-compose.prod.yml exec orthodontist mkdir -p media/profile_pics
 	docker-compose -f docker-compose.prod.yml exec orthodontist cp staticfiles/default.png media/profile_pics/
 
 stop-prod: backup-data

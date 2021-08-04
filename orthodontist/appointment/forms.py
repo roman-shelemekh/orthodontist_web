@@ -1,8 +1,6 @@
 from django import forms
-from django.core.mail import send_mail
 from .models import Patient, Appointment, Clinic
 import re
-from datetime import datetime
 from index.forms import ErrorClassMixin
 
 
@@ -50,15 +48,3 @@ class AppointmentForm(ErrorClassMixin, forms.Form):
         if not re.match(r'^\S+@\S+\.\S+$', email):
             raise forms.ValidationError('Введите корректный электронный адрес.')
         return email
-
-    def send_email(self):
-        date = datetime.strptime(self.cleaned_data['date'], '%Y-%m-%d')
-        time = datetime.strptime(self.cleaned_data['time'], '%H:%M:%S')
-        recipients = ['orthodental@tut.by', self.cleaned_data['email']]
-        subject = 'Запись на прием к врачу-ортодонту'
-        message = 'Уважаемый(-ая) ' + self.cleaned_data['name'] + \
-                  ', \n\nВы успешно записались на прием к врачу-ортодонту Екатерине Бахур, который состоится ' + \
-                 date.strftime('%d.%m.%Y') + ' в ' + time.strftime('%H:%M') + \
-                  '. C Вами свяжутся заранее, чтобы уточнить делали визита. \n\nБлагодарим за интерес к нашим услугам!'
-        sender = 'orthodental@tut.by'
-        send_mail(subject, message, sender, recipients)

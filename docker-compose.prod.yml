@@ -22,6 +22,24 @@ services:
       - ./.env.prod
     depends_on:
       - db
+      - redis
+
+  redis:
+    image: redis:6
+
+  celery:
+    build:
+      context: ./orthodontist
+      dockerfile: Dockerfile.prod
+    command: celery -A orthodontist worker -l info
+    volumes:
+      - static_volume:/home/balthasar/orthodontist/static
+      - media_volume:/home/balthasar/orthodontist/media
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - orthodontist
+      - redis
 
   nginx:
     build: ./nginx

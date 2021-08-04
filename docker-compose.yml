@@ -12,7 +12,8 @@ services:
 
   orthodontist:
     build: ./orthodontist
-    command: python manage.py runserver 0.0.0.0:8000
+    command: >
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
     - ./orthodontist/:/usr/src/orthodontist/
     ports:
@@ -21,6 +22,21 @@ services:
       - ./.env.dev
     depends_on:
       - db
+      - redis
+
+  redis:
+    image: redis:6
+
+  celery:
+    build: ./orthodontist
+    command: celery -A orthodontist worker -l info
+    volumes:
+      - ./orthodontist/:/usr/src/orthodontist/
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - orthodontist
+      - redis
 
 volumes:
   postgres_data:
